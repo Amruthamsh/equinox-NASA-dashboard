@@ -124,19 +124,18 @@ export default function KnowledgeGraphDashboard() {
 
     fetchData();
   }, [selectedQuery]);
-
   const getNodeColor = (type: string) => {
     switch (type) {
       case "Paper":
-        return "#4ADE80";
+        return "#00FFB3"; // bright cyan-green
       case "Topic":
-        return "#60A5FA";
+        return "#FF6EC7"; // neon pink
       case "Entity":
-        return "#FACC15";
+        return "#FFD700"; // neon yellow/gold
       case "Cluster":
-        return "#F87171";
+        return "#7F00FF"; // vivid purple
       default:
-        return "#D1D5DB";
+        return "#AAAAAA"; // muted gray for unknown
     }
   };
 
@@ -196,14 +195,29 @@ export default function KnowledgeGraphDashboard() {
           nodeCanvasObject={(node, ctx, globalScale) => {
             const fontSize = 12 / globalScale;
             ctx.font = `${fontSize}px Sans-Serif`;
+
+            // Glow effect
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = isNodeHighlighted(node)
+              ? getNodeColor(node.type)
+              : "#333";
+
+            // Node circle
             ctx.fillStyle = isNodeHighlighted(node)
               ? getNodeColor(node.type)
-              : "#555";
+              : "#222";
             ctx.beginPath();
-            ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI, false);
+            ctx.arc(node.x, node.y, 6, 0, 2 * Math.PI, false);
             ctx.fill();
-            ctx.fillStyle = isNodeHighlighted(node) ? "#fff" : "#999";
-            ctx.fillText(node.label, node.x + 6, node.y + 3);
+            ctx.shadowBlur = 0;
+
+            // Node label with truncation
+            let label =
+              node.label.length > 20
+                ? node.label.slice(0, 17) + "..."
+                : node.label;
+            ctx.fillStyle = "#fff";
+            ctx.fillText(label, node.x + 8, node.y + 4);
           }}
           linkColor={(link) =>
             isNodeHighlighted(link.source) && isNodeHighlighted(link.target)
