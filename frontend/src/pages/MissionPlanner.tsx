@@ -12,7 +12,11 @@ export default function MissionPlanner() {
     additionalContext: "",
   });
 
-  console.log("Current Mission State:", mission);
+  const [insights, setInsights] = useState({
+    semanticSummary: "",
+    tooltips: {},
+    topPapers: [],
+  });
 
   const handleSubmit = () => {
     axios
@@ -20,6 +24,23 @@ export default function MissionPlanner() {
       .then((response) => {
         alert("Mission submitted successfully!");
         console.log("Response from server:", response.data);
+
+        const data = response.data;
+
+        // Update mission with any returned fields
+        setMission((prev) => ({
+          ...prev,
+          ...data.mission,
+          summary: data.mission.summary || "",
+          additionalContext: data.mission.additionalContext || "",
+        }));
+
+        // Update insights with semantic summary, tooltips, and top papers
+        setInsights({
+          semanticSummary: data.semantic_summary,
+          tooltips: data.tooltips,
+          topPapers: data.top_papers,
+        });
       })
       .catch((error) => {
         console.error("Error submitting mission:", error);
@@ -39,7 +60,7 @@ export default function MissionPlanner() {
 
       {/* Right Panel */}
       <div className="flex-1 p-6 overflow-y-auto">
-        <MissionInsights mission={mission} />
+        <MissionInsights mission={mission} insights={insights} />
       </div>
     </div>
   );
