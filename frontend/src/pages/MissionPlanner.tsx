@@ -18,7 +18,11 @@ export default function MissionPlanner() {
     tooltips: {},
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = () => {
+    setLoading(true);
+
     axios
       .post("http://localhost:8000/post-mission", { mission })
       .then((response) => {
@@ -44,6 +48,8 @@ export default function MissionPlanner() {
       .catch((error) => {
         console.error("Error submitting mission:", error);
       });
+
+    setLoading(false);
   };
 
   return (
@@ -58,9 +64,15 @@ export default function MissionPlanner() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 p-6 overflow-y-auto">
-        <MissionInsights mission={mission} insights={insights} />
-      </div>
+      {loading ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50">
+          <span className="text-white">Loading...</span>
+        </div>
+      ) : (
+        <div className="flex-1 p-6 overflow-y-auto">
+          <MissionInsights mission={mission} insights={insights} />
+        </div>
+      )}
     </div>
   );
 }

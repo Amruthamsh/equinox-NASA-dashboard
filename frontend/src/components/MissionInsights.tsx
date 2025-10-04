@@ -18,7 +18,7 @@ export const MissionInsights = ({ mission, insights }) => {
         <div className="flex flex-col gap-3 text-gray-200">
           {/* Type */}
           <div className="flex items-center gap-2">
-            <span className="font-medium w-24">Type:</span>
+            <span className="font-bold w-24">Type:</span>
             <span className="flex-1">{mission.type}</span>
             {tooltips?.type && (
               <span
@@ -32,7 +32,7 @@ export const MissionInsights = ({ mission, insights }) => {
 
           {/* Objective */}
           <div className="flex items-center gap-2">
-            <span className="font-medium w-24">Objective:</span>
+            <span className="font-bold w-24">Objective:</span>
             <span className="flex-1">{mission.objective}</span>
             {tooltips?.objective && (
               <span
@@ -46,7 +46,7 @@ export const MissionInsights = ({ mission, insights }) => {
 
           {/* Phase */}
           <div className="flex items-center gap-2">
-            <span className="font-medium w-24">Phase:</span>
+            <span className="font-bold w-24">Phase:</span>
             <span className="flex-1">{mission.phase}</span>
             {tooltips?.phase && (
               <span
@@ -60,7 +60,7 @@ export const MissionInsights = ({ mission, insights }) => {
 
           {/* Summary */}
           <div className="flex flex-col gap-1 mt-2">
-            <span className="font-medium">Summary:</span>
+            <span className="font-bold">Summary:</span>
             <p className="text-gray-300 whitespace-pre-line">
               {mission.summary || "No summary available."}
             </p>

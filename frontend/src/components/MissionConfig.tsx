@@ -127,7 +127,7 @@ export const MissionConfig = ({ mission, setMission, onSubmit }) => {
       </div>
 
       {/* Dropdowns */}
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-3">
         {[
           { label: "Type", key: "type", options: ["Mars", "Moon", "Asteroid"] },
           {
@@ -161,6 +161,8 @@ export const MissionConfig = ({ mission, setMission, onSubmit }) => {
           </div>
         ))}
       </div>
+
+      <hr className="border-t border-gray-600 my-4" />
 
       {/* Inputs */}
       <div className="grid grid-cols-2 gap-5">
