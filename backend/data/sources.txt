@@ -1,0 +1,12 @@
+Sources for budget analysis
+
+1. [NASA Annual Budget Documents (FY 2024)](https://www.nasa.gov/wp-content/uploads/2023/03/nasa-fy-2024-cj-v3.pdf)
+2. [Planetary Society NASA Budget Data](https://www.planetary.org/space-policy/nasa-budget)
+3. [Our World in Data: NASA Annual Budget](https://ourworldindata.org/grapher/nasa-annual-budget)
+4. [NASA Budget Plans & Reports](https://www.nasa.gov/budgets-plans-and-reports/)
+5. [NASA Value of NASA Report](https://www.nasa.gov/value-of-nasa/)
+6. [NASA Historical Budget PDFs](https://www.nasa.gov/wp-content/uploads/2023/12/o45128943-1983-1.pdf)
+7. [Statista: NASA Budget by Program Category 2000–2009](https://www.statista.com/statistics/1024446/distribution-nasa-budget-2000-2009/)
+8. [NASA Budget History PDF](https://www.lpi.usra.edu/exploration/multimedia/NASABudgetHistory.pdf)
+9. [NASA FY 2000 Performance Report](https://www.nasa.gov/wp-content/uploads/2023/10/fy-2000-performance-report.pdf)
+10. [Wikipedia: Budget of NASA](https://en.wikipedia.org/wiki/Budget_of_NASA)
