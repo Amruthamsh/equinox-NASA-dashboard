@@ -99,7 +99,9 @@ def get_ai_tabs():
                 {prompt}
                 Here is the recent NASA bioscience data:
                 {df_summary} 
-                Provide answer within 150 words. Return only the answer, no other text. 
+                The count of publications in each category for the recent years is given.
+
+                Provide answer within 100 words. Return only the answer, no other text. 
                 Do not mention the data source. 
                 Don't add any disclaimers or commentary.
                 """
@@ -126,7 +128,9 @@ def ask_ai(request: AskAIRequest):
         {user_question}
         Here is the recent NASA bioscience data:
         {df_summary} 
-        Provide answer within 150 words. Return only the answer, no other text. 
+        The count of publications in each category for the recent years is given. But explain the trend, don't just repeat the numbers.
+
+        Provide answer within 100 words. Return only the answer, no other text. 
         Do not mention the data source. 
         Don't add any disclaimers or commentary.
         """

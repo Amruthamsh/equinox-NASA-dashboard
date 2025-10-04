@@ -13,41 +13,33 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 const COLORS = [
-  "#4ADE80", // Green – growth / biology
-  "#60A5FA", // Blue – calm / tech
-  "#FACC15", // Yellow – highlight / star
-  "#F472B6", // Pink – accent / rare
-  "#FB923C", // Orange – warning / outlier
-  "#A78BFA", // Purple – subtle / sophisticated
-  "#F87171", // Red – alert / important
-  "#34D399", // Mint – secondary highlight
-  "#38BDF8", // Light blue – secondary accent
+  "#4ADE80",
+  "#60A5FA",
+  "#FACC15",
+  "#F472B6",
+  "#FB923C",
+  "#A78BFA",
+  "#F87171",
+  "#34D399",
+  "#38BDF8",
 ];
-
-const TabContent = {
-  SUMMARY:
-    "AI Summary: Biology and Medicine have shown consistent growth. Radiation and Microbe studies are emerging focus areas since 2017.",
-  OUTLIER:
-    "Outlier Detection: Genetics research spiked in 2021 due to renewed human adaptation studies.",
-  INSIGHT:
-    "Insight: SpaceFood and Botany show strong correlation — indicating potential in bio-regenerative life support systems.",
-  "ASK AI":
-    "Ask AI: Which research categories best prepare for long-duration Mars missions? Generate insights and projections.",
-};
 
 export default function ResearchEvolutionChart() {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCategories, setActiveCategories] = useState([]);
-  const [activeTab, setActiveTab] = useState("SUMMARY");
 
+  const [activeTab, setActiveTab] = useState("SUMMARY");
+  const [tabContent, setTabContent] = useState({});
+  const [askQuestion, setAskQuestion] = useState("");
+  const [askAnswer, setAskAnswer] = useState("");
+
+  // Load data for chart
   useEffect(() => {
     axios.get("http://localhost:8000/research-evolution").then((res) => {
       const raw = res.data;
-
       setData(raw);
 
-      // Extract category names dynamically (all keys except 'year')
       const cats = raw.length
         ? Object.keys(raw[0]).filter((k) => k !== "year")
         : [];
@@ -56,6 +48,48 @@ export default function ResearchEvolutionChart() {
     });
   }, []);
 
+  // Load AI tab content (SUMMARY, OUTLIER, INSIGHT) with localStorage caching
+  useEffect(() => {
+    const storedTabs = localStorage.getItem("aiTabs_ResearchEvolution");
+    if (storedTabs) {
+      setTabContent(JSON.parse(storedTabs));
+    } else {
+      axios.get("http://localhost:8000/ai-tabs").then((res) => {
+        setTabContent(res.data);
+        localStorage.setItem("aiTabs", JSON.stringify(res.data));
+      });
+    }
+  }, []);
+
+  const handleAskAI = async () => {
+    if (!askQuestion.trim()) return;
+
+    // Use localStorage caching for questions
+    const storedAnswers = JSON.parse(
+      localStorage.getItem("askAI_ResearchEvolution") || "{}"
+    );
+    if (storedAnswers[askQuestion]) {
+      setAskAnswer(storedAnswers[askQuestion]);
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:8000/ask-ai", {
+        question: askQuestion,
+        df_summary: tabContent.SUMMARY || "", // provide df summary for context
+      });
+
+      const answer = response.data.answer;
+      setAskAnswer(answer);
+
+      const updatedAnswers = { ...storedAnswers, [askQuestion]: answer };
+      localStorage.setItem("askAI", JSON.stringify(updatedAnswers));
+    } catch (err) {
+      console.error(err);
+      setAskAnswer("Error fetching AI answer.");
+    }
+  };
+
   const toggleCategory = (cat) => {
     setActiveCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -63,7 +97,7 @@ export default function ResearchEvolutionChart() {
   };
 
   const handleRefresh = () => {
-    setActiveCategories([]); // reset
+    setActiveCategories([]);
     setTimeout(() => setActiveCategories(categories), 150);
   };
 
@@ -109,14 +143,14 @@ export default function ResearchEvolutionChart() {
         </ResponsiveContainer>
       </div>
 
-      {/* Tab Panel */}
+      {/* AI Insights Panel */}
       <div className="w-1/4 bg-[#151530] rounded-xl p-4 shadow-lg flex flex-col border border-purple-700/30">
         {/* Tabs */}
-        <div className="flex mb-3 space-x-2">
-          {Object.keys(TabContent).map((tab) => (
+        <div className="flex mb-3 space-x-2 overflow-x-auto">
+          {["SUMMARY", "OUTLIER", "INSIGHT", "ASK AI"].map((tab) => (
             <button
               key={tab}
-              className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-all whitespace-nowrap ${
                 activeTab === tab
                   ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
                   : "bg-gray-800 text-gray-300 hover:bg-purple-500/40 hover:text-white"
@@ -138,7 +172,32 @@ export default function ResearchEvolutionChart() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
             >
-              <p className="text-sm leading-relaxed">{TabContent[activeTab]}</p>
+              {activeTab === "ASK AI" ? (
+                <div className="flex flex-col gap-2">
+                  <textarea
+                    rows={4}
+                    value={askQuestion}
+                    onChange={(e) => setAskQuestion(e.target.value)}
+                    className="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 resize-none"
+                    placeholder="Type your question here..."
+                  />
+                  <button
+                    onClick={handleAskAI}
+                    className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-md text-sm font-medium"
+                  >
+                    Ask AI
+                  </button>
+                  {askAnswer && (
+                    <div className="mt-2 p-2 bg-gray-800 rounded-md text-sm whitespace-pre-line">
+                      {askAnswer}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <pre className="text-sm leading-relaxed whitespace-pre-wrap">
+                  {tabContent[activeTab]}
+                </pre>
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
