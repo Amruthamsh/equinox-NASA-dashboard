@@ -3,6 +3,12 @@
 // Units: deltaV (km/s), duration (days), fuel (kg), payload (kg), crew (count),
 // commsLatency (secs one-way), gravity (m/s^2), radDose (mSv/yr), power (kW)
 
+// https://science.nasa.gov/planetary-science/programs/mars-exploration/mission-timeline/
+// https://www.nasa.gov/wp-content/uploads/2015/09/373665main_nasa-sp-2009-566.pdf
+// https://www.nasa.gov/hrp/radiation/space-radiation-risks/
+// https://cneos.jpl.nasa.gov/nhats/details.html
+// https://oig.nasa.gov/wp-content/uploads/2024/09/ig-24-020.pdf
+
 export const defaultMissionValues = {
   Mars: {
     Analysis: {
