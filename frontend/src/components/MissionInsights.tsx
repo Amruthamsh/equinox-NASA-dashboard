@@ -1,7 +1,8 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 export const MissionInsights = ({ mission, insights }) => {
-  const { semanticSummary, tooltips, topPapers } = insights;
+  const { missionInsight, tooltips, topPapers } = insights;
 
   return (
     <div className="space-y-10">
@@ -65,6 +66,21 @@ export const MissionInsights = ({ mission, insights }) => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Semantic Summary Card */}
+      <div className="p-6 bg-gray-800 rounded-2xl shadow-xl border border-gray-700 hover:shadow-purple-500/20 transition-shadow duration-300">
+        <h3 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">
+          Learnings from Research
+        </h3>
+
+        <p className="text-gray-200 whitespace-pre-line">
+          {missionInsight ? (
+            <ReactMarkdown>{missionInsight}</ReactMarkdown>
+          ) : (
+            "No learnings from research available."
+          )}
+        </p>
       </div>
 
       {/* Relevant Publications Card */}

@@ -13,16 +13,15 @@ export default function MissionPlanner() {
   });
 
   const [insights, setInsights] = useState({
-    semanticSummary: "",
-    tooltips: {},
+    missionInsight: "",
     topPapers: [],
+    tooltips: {},
   });
 
   const handleSubmit = () => {
     axios
       .post("http://localhost:8000/post-mission", { mission })
       .then((response) => {
-        alert("Mission submitted successfully!");
         console.log("Response from server:", response.data);
 
         const data = response.data;
@@ -35,9 +34,9 @@ export default function MissionPlanner() {
           additionalContext: data.mission.additionalContext || "",
         }));
 
-        // Update insights with semantic summary, tooltips, and top papers
+        // Update insights with mission insight, tooltips, and top papers
         setInsights({
-          semanticSummary: data.semantic_summary,
+          missionInsight: data.mission_insight,
           tooltips: data.tooltips,
           topPapers: data.top_papers,
         });

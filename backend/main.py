@@ -189,19 +189,48 @@ def nasa_budget():
 def post_mission(request: MissionRequest):
     mission_data = request.mission
 
-    # Generate a semantic summary using Groq
     mission_summary = generate_mission_summary(mission_data)
 
-    # Generate embedding
     mission_embedding = embedding_model.encode(mission_summary, convert_to_numpy=True)
 
-    # Compute similarity with papers
     similarities = cosine_similarity(text_embeddings, mission_embedding.reshape(1, -1)).flatten()
 
-    # Retrieve top 5 most similar papers
     top_idxs = np.argsort(similarities)[::-1][:5]
     top_papers = df.iloc[top_idxs].to_dict(orient="records")
     top_scores = similarities[top_idxs].tolist()
+
+    paper_content = ""
+
+    for paper in top_papers:
+        paper_content += f"{paper.get('clean_full_text')}\n\n"
+
+    groq_input = f"""
+    You are given a set of research papers:
+
+    {paper_content}
+
+    Mission Summary:
+    {mission_summary}
+
+    Task:
+    - Identify key themes, trends, and insights from the papers.
+    - Summarize the findings in concise, informative points.
+    - Highlight notable methodologies, results, or conclusions.
+    - Provide insights relevant to the mission context.
+    - Each insight should be actionable or informative for mission planning or research.
+    - Return the insights as a numbered list in Markdown format.
+    - Each insight should be 1-2 sentences max.
+    - Avoid disclaimers or unrelated commentary like "This is based on the provided research papers." or "Here is the summary in markdown format."
+    - Use proper Markdown syntax (numbers or dashes, bold for key terms if needed).
+    """
+
+    response_summary = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "user", "content": groq_input}
+                ]
+            )
+    mission_insight = response_summary.choices[0].message.content.strip()
 
     results = [
         {"title": paper.get("Title"), "link": paper.get("Link"), "similarity": float(score)}
@@ -211,7 +240,6 @@ def post_mission(request: MissionRequest):
     return JSONResponse(content={
         "message": "Mission data processed and top papers retrieved",
         "mission": mission_data,
-        "semantic_summary": mission_summary,  
-        "tooltips": tooltips,
+        "mission_insight": mission_insight,  
         "top_papers": results
     })
