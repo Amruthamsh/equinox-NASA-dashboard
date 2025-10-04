@@ -1,3 +1,4 @@
+import NasaBudgetVisualization from "@/components/NASABudget";
 import PapersTable from "@/components/PapersTable";
 import ResearchEvolutionChart from "@/components/ResearchEvolutionOverTime";
 
@@ -7,6 +8,7 @@ const Analytics = () => {
       <div className="flex flex-col gap-8">
         {" "}
         <ResearchEvolutionChart />
+        <NasaBudgetVisualization />
         <PapersTable />
       </div>
     </div>
