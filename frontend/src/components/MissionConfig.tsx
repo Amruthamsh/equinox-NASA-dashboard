@@ -27,7 +27,8 @@ export const MissionConfig = ({ mission, setMission, onSubmit }) => {
     setMission((prev) => ({
       ...prev,
       ...defaults,
-      context: cleanedContext,
+      summary: cleanedContext,
+      additionalContext: "",
       type: prev.type,
       phase: prev.phase,
       objective: prev.objective,
@@ -107,7 +108,7 @@ export const MissionConfig = ({ mission, setMission, onSubmit }) => {
 
   return (
     <motion.div
-      className="p-6 space-y-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-950 rounded-3xl shadow-2xl border border-gray-700 text-white"
+      className="p-6 space-y-6 bg-gradient-to-br bg-slate-950 rounded-3xl shadow-2xl border border-gray-700 text-white"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -192,7 +193,7 @@ export const MissionConfig = ({ mission, setMission, onSubmit }) => {
         </label>
         <Textarea
           rows={5}
-          onChange={(e) => handleChange("context", e.target.value)}
+          onChange={(e) => handleChange("additionalContext", e.target.value)}
           className="bg-gray-800/80 border border-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-gray-500 shadow-inner resize-none whitespace-pre-wrap"
         />
       </div>

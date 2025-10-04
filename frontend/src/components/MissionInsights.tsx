@@ -36,7 +36,9 @@ export const MissionInsights = ({ mission }) => {
           Mission Type: <strong>{mission.type}</strong> <br />
           Phase: <strong>{mission.phase}</strong> <br />
           Objective: <strong>{mission.objective}</strong> <br />
-          Context: <strong>{mission.context || "None"}</strong>
+          Summary: <strong>{mission.summary || "None"}</strong> <br />
+          Additional Context:{" "}
+          <strong>{mission.additionalContext || "None"}</strong>
         </p>
       </div>
 
@@ -50,24 +52,6 @@ export const MissionInsights = ({ mission }) => {
             </li>
           ))}
         </ul>
-      </div>
-
-      {/* Mind Map / Chart */}
-      <div className="p-4 bg-gray-800 rounded-md h-64">
-        <h3 className="text-xl font-semibold mb-2">Mission Mind Map</h3>
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            data={mindMapData}
-            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-          >
-            <CartesianGrid stroke="#444" strokeDasharray="3 3" />
-            <XAxis dataKey="name" stroke="#fff" />
-            <YAxis stroke="#fff" />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#4ade80" />
-          </ComposedChart>
-        </ResponsiveContainer>
       </div>
     </div>
   );

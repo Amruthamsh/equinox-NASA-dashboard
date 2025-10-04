@@ -8,7 +8,8 @@ export default function MissionPlanner() {
     type: "Mars",
     phase: "Planning",
     objective: "Scientific Research",
-    context: "",
+    summary: "",
+    additionalContext: "",
   });
 
   console.log("Current Mission State:", mission);
