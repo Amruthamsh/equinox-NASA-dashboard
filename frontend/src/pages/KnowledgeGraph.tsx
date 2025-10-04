@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import neo4j from "neo4j-driver";
-import { Process } from "framer-motion";
 
-// ShadCN Select components
+// ShadCN Select + Checkbox components
 import {
   Select,
   SelectTrigger,
@@ -11,8 +10,8 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox"; // assuming you have a checkbox component
 
-// ---------------- Neo4j driver ----------------
 const driver = neo4j.driver(
   import.meta.env.VITE_NEO4J_URI,
   neo4j.auth.basic(
@@ -21,7 +20,6 @@ const driver = neo4j.driver(
   )
 );
 
-// ---------------- Preset Queries ----------------
 const PRESET_QUERIES = {
   "Topics Graph": `
     MATCH (c:Cluster)-[:HAS_TOPIC]->(t:Topic)<-[:MENTIONS]-(p:Paper)
@@ -43,44 +41,32 @@ const PRESET_QUERIES = {
     RETURN t1, t2, COUNT(p) AS co_occurrence
     ORDER BY co_occurrence DESC LIMIT 50
   `,
-  "Papers per Cluster": `
-    MATCH (c:Cluster)<-[:CONTAINS]-(e:Entity)<-[:REPORTS]-(p:Paper)
-    RETURN c, COUNT(p) AS paper_count
-    ORDER BY paper_count DESC LIMIT 50
-  `,
-  "Results per Topic": `
-    MATCH (t:Topic)<-[:MENTIONS]-(p:Paper)-[:REPORTS]->(e:Entity)
-    WHERE e.type="Result"
-    RETURN t, COUNT(e) AS result_count
-    ORDER BY result_count DESC LIMIT 50
-  `,
   "Top Entities by Relations": `
     MATCH (a:Entity)-[r:RELATION]->(b:Entity)
     RETURN a, COUNT(r) AS rel_count
     ORDER BY rel_count DESC LIMIT 50
   `,
-  "Papers mentioning multiple Topics": `
-    MATCH (p:Paper)-[:MENTIONS]->(t:Topic)
-    WITH p, COUNT(t) AS topic_count
-    WHERE topic_count > 1
-    RETURN p, topic_count
-    ORDER BY topic_count DESC LIMIT 50
-  `,
 };
 
-// ---------------- Dashboard Component ----------------
 export default function KnowledgeGraphDashboard() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const [selectedQuery, setSelectedQuery] = useState("Topics Graph");
   const [loading, setLoading] = useState(false);
   const [selectedNode, setSelectedNode] = useState<any>(null);
 
-  // ---------------- Fetch data ----------------
+  // Filters
+  const [highlightedTypes, setHighlightedTypes] = useState<string[]>([
+    "Paper",
+    "Topic",
+    "Entity",
+    "Cluster",
+  ]);
+
+  // ---------------- Fetch Neo4j data ----------------
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       const session = driver.session();
-
       try {
         const res = await session.run(PRESET_QUERIES[selectedQuery]);
         const nodesMap: Record<string, any> = {};
@@ -91,7 +77,6 @@ export default function KnowledgeGraphDashboard() {
 
           rec.forEach((v) => {
             if (!v) return;
-
             let node: any = null;
             if (typeof v.toObject === "function") node = v;
             else if (v.identity) node = v;
@@ -109,35 +94,17 @@ export default function KnowledgeGraphDashboard() {
                   `Node ${id}`,
                 type: node.labels ? node.labels[0] : "Unknown",
                 props: node.properties || {},
-                extra:
-                  v?.low ||
-                  v?.rel_count ||
-                  v?.paper_count ||
-                  v?.result_count ||
-                  v?.topic_count,
               };
             }
             nodeIds.push(id);
           });
 
-          // Build links depending on query type
           if (selectedQuery === "Entity Relations" && rec.length === 3) {
             const [a, b, r] = rec;
             links.push({
               source: a.identity?.toString(),
               target: b.identity?.toString(),
               type: r?.properties?.type || "related_to",
-            });
-          } else if (
-            selectedQuery === "Co-occurring Topics" &&
-            rec.length === 3
-          ) {
-            const [t1, t2, co] = rec;
-            links.push({
-              source: t1.identity?.toString(),
-              target: t2.identity?.toString(),
-              type: "co_occurrence",
-              weight: co?.low || 1,
             });
           } else if (nodeIds.length >= 2) {
             for (let i = 0; i < nodeIds.length - 1; i++) {
@@ -158,7 +125,7 @@ export default function KnowledgeGraphDashboard() {
     fetchData();
   }, [selectedQuery]);
 
-  const getNodeColor = (type) => {
+  const getNodeColor = (type: string) => {
     switch (type) {
       case "Paper":
         return "#4ADE80";
@@ -173,10 +140,13 @@ export default function KnowledgeGraphDashboard() {
     }
   };
 
+  // ---------------- Highlight logic ----------------
+  const isNodeHighlighted = (node: any) => highlightedTypes.includes(node.type);
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-black text-white">
       {/* Sidebar */}
-      <div className="w-72 p-4 border-r border-gray-200 flex flex-col gap-4">
+      <div className="w-72 p-4 border-r border-gray-800 flex flex-col gap-4">
         <h2 className="text-lg font-semibold">Knowledge Graph</h2>
 
         <Select
@@ -195,47 +165,70 @@ export default function KnowledgeGraphDashboard() {
           </SelectContent>
         </Select>
 
-        {loading && <p className="text-gray-500 mt-2">Loading...</p>}
+        <h3 className="mt-4 font-semibold">Highlight Types</h3>
+        <div>
+          {["Paper", "Topic", "Entity", "Cluster"].map((type) => (
+            <label key={type} className="flex items-center mb-2">
+              <Checkbox
+                checked={highlightedTypes.includes(type)}
+                onCheckedChange={(checked) => {
+                  setHighlightedTypes((prev) =>
+                    checked ? [...prev, type] : prev.filter((t) => t !== type)
+                  );
+                }}
+                className="mr-2"
+              />
+              {type}
+            </label>
+          ))}
+        </div>
+
+        {loading && <p className="text-gray-400 mt-2">Loading...</p>}
       </div>
 
       {/* Graph */}
       <div className="flex-1 relative">
         <ForceGraph2D
           graphData={graphData}
-          nodeLabel={(node) =>
-            node.extra ? `${node.label} (${node.extra})` : node.label
-          }
+          nodeLabel="label"
           nodeAutoColorBy="type"
           onNodeClick={(node) => setSelectedNode(node)}
           nodeCanvasObject={(node, ctx, globalScale) => {
             const fontSize = 12 / globalScale;
             ctx.font = `${fontSize}px Sans-Serif`;
-            ctx.fillStyle = getNodeColor(node.type);
+            ctx.fillStyle = isNodeHighlighted(node)
+              ? getNodeColor(node.type)
+              : "#555";
             ctx.beginPath();
             ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI, false);
             ctx.fill();
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = isNodeHighlighted(node) ? "#fff" : "#999";
             ctx.fillText(node.label, node.x + 6, node.y + 3);
           }}
-          linkWidth={(link) => link.weight || 1}
+          linkColor={(link) =>
+            isNodeHighlighted(link.source) && isNodeHighlighted(link.target)
+              ? "#999"
+              : "rgba(255,255,255,0.05)"
+          }
+          linkWidth={(link) =>
+            isNodeHighlighted(link.source) && isNodeHighlighted(link.target)
+              ? 1
+              : 0.5
+          }
           linkDirectionalArrowLength={4}
           linkDirectionalArrowRelPos={1}
+          backgroundColor="#0f0f1f"
           width={window.innerWidth - 288}
           height={window.innerHeight}
         />
 
         {/* Node details panel */}
         {selectedNode && (
-          <div className="absolute right-0 top-0 w-80 h-full bg-white border-l border-gray-200 shadow-lg p-4 overflow-auto z-50">
+          <div className="absolute right-0 top-0 w-80 h-full bg-gray-900 border-l border-gray-700 shadow-lg p-4 overflow-auto z-50">
             <h3 className="text-lg font-bold mb-2">{selectedNode.label}</h3>
-            <p className="text-sm text-gray-500 mb-2">
+            <p className="text-sm text-gray-400 mb-2">
               Type: {selectedNode.type}
             </p>
-
-            {selectedNode.extra && (
-              <p className="text-sm mb-2">Value: {selectedNode.extra}</p>
-            )}
-
             <h4 className="font-semibold mb-1">Properties:</h4>
             <ul className="list-disc pl-5 text-sm">
               {selectedNode.props &&
@@ -245,7 +238,6 @@ export default function KnowledgeGraphDashboard() {
                   </li>
                 ))}
             </ul>
-
             <button
               className="mt-4 px-2 py-1 bg-red-500 text-white rounded"
               onClick={() => setSelectedNode(null)}
