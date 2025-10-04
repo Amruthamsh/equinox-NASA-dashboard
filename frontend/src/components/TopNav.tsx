@@ -50,7 +50,9 @@ export default function TopNav() {
             <NavLink
               key={item.name}
               to={item.path}
-              ref={(el) => (navRefs.current[idx] = el)}
+              ref={(el) => {
+                navRefs.current[idx] = el;
+              }}
               className={({ isActive }) =>
                 `relative text-lg px-3 py-2 font-medium transition-colors duration-200 hover:text-purple-400 ${
                   isActive ? "text-purple-400" : "text-gray-300"
