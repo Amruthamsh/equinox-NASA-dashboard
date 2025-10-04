@@ -1,0 +1,1016 @@
+{
+  "0": {
+    "cluster_summary": "Research on endomembrane trafficking mechanisms in plants and Drosophila reveals roles of Rab/SNARE proteins in vesicle trafficking, pollen development, root growth, stress responses, and centrosome attachment.",
+    "topics": [
+      "Plant endomembrane trafficking and its role in development and stress responses",
+      "Functional redundancy of Rab and SNARE protein families",
+      "TNO1's roles in vacuolar trafficking, root morphogenesis, and auxin-mediated processes",
+      "Centrosome-nuclear attachment in Drosophila spermatogenesis"
+    ],
+    "entities": [
+      {
+        "name": "AtRabD2b",
+        "type": "Protein"
+      },
+      {
+        "name": "AtRabD2c",
+        "type": "Protein"
+      },
+      {
+        "name": "TNO1",
+        "type": "Protein"
+      },
+      {
+        "name": "SYP41",
+        "type": "Protein"
+      },
+      {
+        "name": "AtGTLP",
+        "type": "Protein"
+      },
+      {
+        "name": "spag4",
+        "type": "Gene"
+      },
+      {
+        "name": "Yuri",
+        "type": "Protein"
+      },
+      {
+        "name": "GCaMP3",
+        "type": "Method"
+      },
+      {
+        "name": "coimmunoprecipitation",
+        "type": "Method"
+      },
+      {
+        "name": "deformed pollen",
+        "type": "Result"
+      },
+      {
+        "name": "enhanced root skewing",
+        "type": "Result"
+      },
+      {
+        "name": "auxin transport defects",
+        "type": "Result"
+      },
+      {
+        "name": "vacuolar protein missecretion",
+        "type": "Result"
+      },
+      {
+        "name": "centriole-nuclear dissociation",
+        "type": "Result"
+      }
+    ],
+    "relations": [
+      {
+        "source": "AtRabD2b",
+        "target": "AtRabD2c",
+        "type": "functional_redundancy"
+      },
+      {
+        "source": "TNO1",
+        "target": "vacuolar trafficking",
+        "type": "required_for"
+      },
+      {
+        "source": "TNO1",
+        "target": "salt tolerance",
+        "type": "required_for"
+      },
+      {
+        "source": "TNO1",
+        "target": "root skewing",
+        "type": "modulates"
+      },
+      {
+        "source": "TNO1",
+        "target": "auxin transport",
+        "type": "regulates"
+      },
+      {
+        "source": "spag4",
+        "target": "centriole attachment",
+        "type": "required_for"
+      },
+      {
+        "source": "spag4",
+        "target": "Yuri",
+        "type": "interacts_with"
+      },
+      {
+        "source": "AtGTLP",
+        "target": "SNARE family",
+        "type": "redundant_function"
+      },
+      {
+        "source": "TNO1",
+        "target": "cell morphology maintenance",
+        "type": "required_for"
+      }
+    ]
+  },
+  "1": {
+    "cluster_summary": "This cluster of scientific studies explores the effects of spaceflight and microgravity on microbial communities, host-microbe interactions, and environmental microbiomes, highlighting changes in biofilm formation, gut microbiome composition, fungal diversity, and microbial growth dynamics under extraterrestrial conditions.",
+    "topics": [
+      "Microgravity effects on microbiome health",
+      "Biofilm formation in space",
+      "Fungal diversity in spacecraft environments",
+      "Host-microbiome interactions during long-duration spaceflight"
+    ],
+    "entities": [
+      {
+        "name": "Mars500 experiment",
+        "type": "Study"
+      },
+      {
+        "name": "Pseudomonas aeruginosa",
+        "type": "Microorganism"
+      },
+      {
+        "name": "Metagenomics",
+        "type": "Method"
+      },
+      {
+        "name": "Time-of-wetness framework",
+        "type": "Model"
+      },
+      {
+        "name": "ISS (International Space Station)",
+        "type": "Environment"
+      },
+      {
+        "name": "Biofilm biomass",
+        "type": "Result"
+      },
+      {
+        "name": "Butyrate-metabolizing bacteria (e.g., Extibacter muris)",
+        "type": "Microorganism"
+      },
+      {
+        "name": "RNA-Seq",
+        "type": "Method"
+      },
+      {
+        "name": "4.4\u00d710\u2076 to 2.1\u00d710\u00b9\u2070 spores/mg",
+        "type": "Quantitative Result"
+      },
+      {
+        "name": "Low-shear modeled microgravity (LSMMG)",
+        "type": "Experimental Condition"
+      },
+      {
+        "name": "Gut-liver axis disruption",
+        "type": "Physiological Impact"
+      },
+      {
+        "name": "Column-and-canopy biofilm architecture",
+        "type": "Structural Observation"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Microgravity",
+        "target": "Biofilm biomass",
+        "type": "increases"
+      },
+      {
+        "source": "Long-term confinement",
+        "target": "Gut microbiome diversity",
+        "type": "alters"
+      },
+      {
+        "source": "Low phosphate + reduced oxygen",
+        "target": "Pseudomonas aeruginosa cell density",
+        "type": "increases"
+      },
+      {
+        "source": "Time-of-wetness",
+        "target": "Fungal growth prediction",
+        "type": "enables"
+      },
+      {
+        "source": "Microgravity",
+        "target": "Column-and-canopy biofilm architecture",
+        "type": "induces"
+      },
+      {
+        "source": "Metagenomics",
+        "target": "Host-gut microbiome interactions",
+        "type": "identifies"
+      },
+      {
+        "source": "LSMMG",
+        "target": "Mycobacterium marinum stress resistance",
+        "type": "reduces"
+      },
+      {
+        "source": "High moisture",
+        "target": "Fungal diversity reduction",
+        "type": "causes"
+      },
+      {
+        "source": "Bile acid-metabolizing bacteria depletion",
+        "target": "Insulin resistance",
+        "type": "correlates with"
+      }
+    ]
+  },
+  "2": {
+    "cluster_summary": "This cluster explores the impact of spaceflight and hypergravity on immune system function and immune cell differentiation, with additional investigations into SARS-CoV-2/COVID-19 host effects and macrophage-related disease models. Studies span from Drosophila to mammals, highlighting molecular pathways, gene expression, and immune response alterations under altered gravity, as well as validation of sequencing methods for antibody repertoire analysis.",
+    "topics": [
+      "Immune response modulation by gravity and spaceflight",
+      "Macrophage differentiation and proliferation in space",
+      "Antibody repertoire dynamics in physiological and spaceflight conditions",
+      "Innate immune signaling pathways (Toll, Imd)",
+      "SARS-CoV-2 systemic host effects and immune dysregulation"
+    ],
+    "entities": [
+      {
+        "name": "Drosophila (Toll/Imd pathways)",
+        "type": "Model Organism"
+      },
+      {
+        "name": "Hypergravity",
+        "type": "Condition"
+      },
+      {
+        "name": "Spaceflight (microgravity)",
+        "type": "Condition"
+      },
+      {
+        "name": "Heat shock stress system activation",
+        "type": "Result"
+      },
+      {
+        "name": "Toll pathway failure in spaceflight",
+        "type": "Result"
+      },
+      {
+        "name": "Macrophage colony stimulating factor (M-CSF)",
+        "type": "Molecule"
+      },
+      {
+        "name": "c-Fms receptor",
+        "type": "Receptor"
+      },
+      {
+        "name": "Illumina MiSeq/HiSeq sequencing",
+        "type": "Method"
+      },
+      {
+        "name": "BioServe Fluid Processing Apparatus (FPA)",
+        "type": "Instrument"
+      },
+      {
+        "name": "Techshot Cell Cult Bioreactor",
+        "type": "Instrument"
+      },
+      {
+        "name": "DB-1 macrophage cell line",
+        "type": "Cell Line"
+      },
+      {
+        "name": "Leptin receptor deficiency",
+        "type": "Genetic Mutation"
+      },
+      {
+        "name": "ASFV (African swine fever virus)",
+        "type": "Pathogen"
+      },
+      {
+        "name": "Tetrandrine/Berbamine",
+        "type": "Compound"
+      },
+      {
+        "name": "Coagulation pathway gene expression",
+        "type": "Result"
+      },
+      {
+        "name": "CD11b, F4/80, MAC-2 markers",
+        "type": "Marker"
+      },
+      {
+        "name": "Immunoglobulin heavy-light chain diversity",
+        "type": "Dataset"
+      },
+      {
+        "name": "SARS-CoV-2 systemic host effects",
+        "type": "Pathophysiology"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Hypergravity",
+        "target": "Toll pathway resistance to fungus",
+        "type": "enhances"
+      },
+      {
+        "source": "yuri gagarin mutation",
+        "target": "Hypergravity resistance",
+        "type": "abrogates"
+      },
+      {
+        "source": "Spaceflight",
+        "target": "Heat shock stress system activation",
+        "type": "induces"
+      },
+      {
+        "source": "Spaceflight",
+        "target": "Toll pathway dysfunction post-fungus infection",
+        "type": "impairs"
+      },
+      {
+        "source": "STS-126 spaceflight experiment",
+        "target": "Macrophage proliferation increase",
+        "type": "demonstrates"
+      },
+      {
+        "source": "Horizontal FPA orientation",
+        "target": "Macrophage recovery",
+        "type": "improves"
+      },
+      {
+        "source": "Techshot bioreactor",
+        "type": "influences",
+        "target": "Macrophage differentiation state variability"
+      },
+      {
+        "source": "DB-1 cell line",
+        "target": "Leptin-independent immune signaling",
+        "type": "enables study of"
+      },
+      {
+        "source": "Tetrandrine",
+        "target": "ASFV entry inhibition",
+        "type": "inhibits"
+      },
+      {
+        "source": "Unamplified NGS",
+        "target": "Antibody V-gene diversity",
+        "type": "captures increased"
+      },
+      {
+        "source": "Spaceflight",
+        "target": "B-cell IgH/Ig\u03bb repertoire diversity",
+        "type": "does not alter"
+      },
+      {
+        "source": "SARS-CoV-2",
+        "target": "Systemic organ metabolism disruption",
+        "type": "causes"
+      }
+    ]
+  },
+  "3": {
+    "cluster_summary": "This cluster integrates findings from multiple studies on the biological impacts of spaceflight and microgravity, including cardiovascular, metabolic, and cellular responses in animals, as well as genetic and epigenetic changes. Key themes include the effects of microgravity on lipid metabolism, oxidative stress, gene expression, and tissue regeneration, alongside operational strategies for rodent experiments in space.",
+    "topics": [
+      "Microgravity-induced cardiovascular and metabolic changes",
+      "Genomic and epigenomic responses to spaceflight",
+      "Rodent training programs for spaceflight adaptation",
+      "Lipid dysregulation in liver under microgravity",
+      "Space radiation and oxidative stress pathways",
+      "Cardiac remodeling in microgravity"
+    ],
+    "entities": [
+      {
+        "name": "Bion-M 1 mission",
+        "type": "Experiment"
+      },
+      {
+        "name": "Microgravity",
+        "type": "Condition"
+      },
+      {
+        "name": "C57BL/6 mice",
+        "type": "Model Organism"
+      },
+      {
+        "name": "RNA-seq",
+        "type": "Method"
+      },
+      {
+        "name": "Telemetry",
+        "type": "Instrument"
+      },
+      {
+        "name": "Lipid dysregulation",
+        "type": "Phenotype"
+      },
+      {
+        "name": "Oxidative stress pathways",
+        "type": "Pathway"
+      },
+      {
+        "name": "miR-125/let-7a miRNAs",
+        "type": "Molecule"
+      },
+      {
+        "name": "FYN kinase",
+        "type": "Protein"
+      },
+      {
+        "name": "Nfe2l2 (Nrf2) downregulation",
+        "type": "Gene Expression"
+      },
+      {
+        "name": "Space radiation",
+        "type": "Stressor"
+      },
+      {
+        "name": "Muscle atrophy",
+        "type": "Phenotype"
+      },
+      {
+        "name": "Cardiac remodeling",
+        "type": "Phenotype"
+      },
+      {
+        "name": "GeneLab database",
+        "type": "Resource"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Microgravity",
+        "target": "Lipid dysregulation",
+        "type": "correlates_with"
+      },
+      {
+        "source": "Microgravity",
+        "target": "Oxidative stress pathways",
+        "type": "activates"
+      },
+      {
+        "source": "Space radiation",
+        "target": "Oxidative stress pathways",
+        "type": "induces"
+      },
+      {
+        "source": "RNA-seq",
+        "target": "Gene expression changes",
+        "type": "measures"
+      },
+      {
+        "source": "Telemetry",
+        "target": "Cardiac function monitoring",
+        "type": "enables"
+      },
+      {
+        "source": "miR-125/let-7a miRNAs",
+        "target": "Cardiovascular protection",
+        "type": "mediates"
+      },
+      {
+        "source": "Oxidative stress pathways",
+        "target": "Cardiac dysfunction",
+        "type": "contributes_to"
+      },
+      {
+        "source": "Bion-M 1 mission",
+        "target": "Cardiac remodeling",
+        "type": "observes"
+      },
+      {
+        "source": "GeneLab database",
+        "target": "Oxidative stress-FYN pathway",
+        "type": "supports"
+      },
+      {
+        "source": "C57BL/6 mice",
+        "target": "Microgravity studies",
+        "type": "used_in"
+      },
+      {
+        "source": "Microgravity",
+        "target": "Muscle-liver metabolic crosstalk",
+        "type": "induces"
+      },
+      {
+        "source": "Space radiation",
+        "target": "Lipid accumulation",
+        "type": "induces"
+      },
+      {
+        "source": "FYN kinase",
+        "type": "regulates",
+        "target": "Reactive oxygen species (ROS)"
+      }
+    ]
+  },
+  "4": {
+    "cluster_summary": "A cluster focusing on NASA's space biology research, including molecular biology techniques in microgravity, omics data systems, radiation effects on biological systems, ethical considerations for space exploration, and translational research for human health in space.",
+    "topics": [
+      "Microgravity RNA isolation and qPCR validation",
+      "Space radiation effects on DNA/methylation/aging",
+      "Omics data FAIRness and usability",
+      "Countermeasures for space radiation damage",
+      "Translational research for space medicine and exploration"
+    ],
+    "entities": [
+      {
+        "name": "WetLab-2",
+        "type": "Instrument"
+      },
+      {
+        "name": "RNA Sample Preparation Module",
+        "type": "Method"
+      },
+      {
+        "name": "Centrifuge",
+        "type": "Instrument"
+      },
+      {
+        "name": "Real-time PCR thermal cycler",
+        "type": "Instrument"
+      },
+      {
+        "name": "Galactic Cosmic Radiation (GCR)",
+        "type": "Phenomenon"
+      },
+      {
+        "name": "DNA methylation patterns",
+        "type": "Biomarker"
+      },
+      {
+        "name": "Chromosomal positioning",
+        "type": "Biological Process"
+      },
+      {
+        "name": "GeneLab Data Systems (GLDS)",
+        "type": "Database"
+      },
+      {
+        "name": "FAIRness metrics",
+        "type": "Standard"
+      },
+      {
+        "name": "miR-16-5p",
+        "type": "Biomarker"
+      },
+      {
+        "name": "Frailty-like gene expression changes",
+        "type": "Result"
+      },
+      {
+        "name": "RNA-sequencing pipeline",
+        "type": "Method"
+      },
+      {
+        "name": "Antagomirs (miRNA inhibitors)",
+        "type": "Countermeasure"
+      },
+      {
+        "name": "Cycle threshold (Ct) similarity to Earth controls",
+        "type": "Result"
+      },
+      {
+        "name": "Mitochondrial function rescue",
+        "type": "Biological Outcome"
+      }
+    ],
+    "relations": [
+      {
+        "source": "WetLab-2",
+        "target": "RNA isolation in microgravity",
+        "type": "enables"
+      },
+      {
+        "source": "RNA Sample Preparation Module",
+        "target": "On-orbit RNA purification",
+        "type": "facilitates"
+      },
+      {
+        "source": "Real-time PCR thermal cycler",
+        "target": "Ct measurement variability",
+        "type": "causes"
+      },
+      {
+        "source": "Antagomirs",
+        "target": "DNA double strand break reduction",
+        "type": "mitigates"
+      },
+      {
+        "source": "GeneLab",
+        "target": "FAIRness assessment",
+        "type": "subject"
+      },
+      {
+        "source": "Chromosomal positioning",
+        "target": "DNA methylation changes",
+        "type": "influences"
+      },
+      {
+        "source": "Galactic Cosmic Radiation",
+        "target": "Mitochondrial dysfunction",
+        "type": "induces"
+      },
+      {
+        "source": "Translational research",
+        "target": "Radioprotector development",
+        "type": "supports"
+      }
+    ]
+  },
+  "5": {
+    "cluster_summary": "Cluster focuses on plant growth regulation via actin cytoskeleton, hormonal signaling (auxin, brassinosteroids, cytokinins), and responses to spaceflight stress. It identifies molecular mechanisms underlying root gravitropism, auxin gradient establishment, and organ-specific gene/protein expression changes in microgravity.",
+    "topics": [
+      "Actin cytoskeleton regulation of plant root gravitropism",
+      "Plant hormone interactions in root development",
+      "Spaceflight-induced transcriptomic and proteomic reprogramming",
+      "Genetic and environmental factors in root skewing and spaceflight adaptation"
+    ],
+    "entities": [
+      {
+        "name": "Actin cytoskeleton",
+        "type": "Molecular Mechanism"
+      },
+      {
+        "name": "Auxin",
+        "type": "Hormone"
+      },
+      {
+        "name": "Brassinosteroids",
+        "type": "Hormone"
+      },
+      {
+        "name": "Epi-brassinolide (eBL)",
+        "type": "Hormone Analog"
+      },
+      {
+        "name": "Latrunculin B",
+        "type": "Actin Disruptor"
+      },
+      {
+        "name": "Unfolded Protein Response (UPR)",
+        "type": "Stress Response Pathway"
+      },
+      {
+        "name": "SI-NDVI imaging",
+        "type": "Method"
+      },
+      {
+        "name": "iTRAQ proteomics",
+        "type": "Method"
+      },
+      {
+        "name": "pDR5r::GFP reporter system",
+        "type": "Instrument"
+      },
+      {
+        "name": "SpaceX-CRS12 mission",
+        "type": "Experiment"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Actin cytoskeleton",
+        "target": "Root gravitropism",
+        "type": "regulates"
+      },
+      {
+        "source": "Auxin",
+        "target": "Gravity sensing",
+        "type": "mediates"
+      },
+      {
+        "source": "Brassinosteroids",
+        "target": "F-actin remodeling",
+        "type": "modulates"
+      },
+      {
+        "source": "eBL",
+        "target": "Autotropic root straightening",
+        "type": "inhibits"
+      },
+      {
+        "source": "SI-NDVI imaging",
+        "target": "Early stress detection",
+        "type": "enables"
+      },
+      {
+        "source": "UPR",
+        "target": "Spaceflight transcriptome",
+        "type": "regulates"
+      },
+      {
+        "source": "SpaceX-CRS12 mission",
+        "target": "Arabidopsis transcriptome",
+        "type": "altered"
+      },
+      {
+        "source": "iTRAQ proteomics",
+        "type": "quantifies",
+        "target": "Root proteome changes"
+      }
+    ]
+  },
+  "6": {
+    "cluster_summary": "This cluster focuses on the biological impacts of microgravity and spaceflight on cellular and physiological systems, including stem cell differentiation, muscle atrophy mechanisms, vestibular adaptation, and potential therapeutic interventions.",
+    "topics": [
+      "Microgravity effects on stem cell pluripotency and regenerative medicine",
+      "Mechanotransduction and muscular dystrophy signaling pathways",
+      "Vestibular system adaptation to gravity changes",
+      "Spaceflight-induced skeletal muscle atrophy and SERCA dysfunction",
+      "Caveolae-mediated lymphatic transport and vascular function"
+    ],
+    "entities": [
+      {
+        "name": "Microgravity with microsphere culture",
+        "type": "Method"
+      },
+      {
+        "name": "Wave-stirring shaker",
+        "type": "Instrument"
+      },
+      {
+        "name": "Polystyrene and collagen microspheres",
+        "type": "Material"
+      },
+      {
+        "name": "Pluripotent markers (OCT4, SOX2, NANOG)",
+        "type": "Biomarker"
+      },
+      {
+        "name": "p70S6K (p70 S6 kinase)",
+        "type": "Protein"
+      },
+      {
+        "name": "Gamma-sarcoglycan-null (\u03b3-SG -/-) mice",
+        "type": "AnimalModel"
+      },
+      {
+        "name": "Spaceflight-induced calcium dysregulation",
+        "type": "Pathophysiology"
+      },
+      {
+        "name": "Glycogen synthase kinase 3 (GSK3\u03b2)",
+        "type": "Protein"
+      },
+      {
+        "name": "Manganese(III) meso-tetrakis (BuOE) treatment",
+        "type": "Therapeutic"
+      },
+      {
+        "name": "Caveolin-1 knockout (CavKO) mice",
+        "type": "AnimalModel"
+      },
+      {
+        "name": "Lyve1-Cre x Cav1 flox/flox (LyCav) mice",
+        "type": "AnimalModel"
+      },
+      {
+        "name": "Reduced SERCA pump activation",
+        "type": "Result"
+      },
+      {
+        "name": "Increased lymphatic macromolecule permeability",
+        "type": "Result"
+      },
+      {
+        "name": "Decreased phasic contractility in lymphatics",
+        "type": "Result"
+      },
+      {
+        "name": "Altered DNA repair and Wnt signaling in spaceflight-cultured CPCs",
+        "type": "Result"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Microgravity with microsphere culture",
+        "target": "Pluripotent markers (OCT4, SOX2, NANOG)",
+        "type": "increases"
+      },
+      {
+        "source": "Gamma-sarcoglycan-null (\u03b3-SG -/-) mice",
+        "target": "p70S6K mechanotransduction dysregulation",
+        "type": "causes"
+      },
+      {
+        "source": "Glycogen synthase kinase 3 (GSK3\u03b2) inhibition",
+        "target": "Muscle fiber type preservation",
+        "type": "prevents"
+      },
+      {
+        "source": "Spaceflight",
+        "target": "Reduced SERCA pump activation",
+        "type": "induces"
+      },
+      {
+        "source": "Caveolin-1 knockout (CavKO) mice",
+        "target": "Increased lymphatic macromolecule permeability",
+        "type": "causes"
+      },
+      {
+        "source": "Manganese(III) meso-tetrakis (BuOE) treatment",
+        "target": "SERCA dysfunction in spaceflight",
+        "type": "fails_to_rescue"
+      },
+      {
+        "source": "Spaceflight",
+        "target": "Altered DNA repair and Wnt signaling in CPCs",
+        "type": "induces"
+      }
+    ]
+  },
+  "7": {
+    "cluster_summary": "This cluster focuses on the effects of microgravity, reduced mechanical loading, and ionizing radiation on musculoskeletal degeneration, including molecular mechanisms, experimental models, and potential countermeasures.",
+    "topics": [
+      "Microgravity-induced bone loss mechanisms",
+      "Cyclic loading methods for bone quality assessment",
+      "Radiation effects on collagen and bone mechanics",
+      "Partial weight suspension models for reduced gravity simulation",
+      "BMPR1A treatment for disuse-induced bone loss"
+    ],
+    "entities": [
+      {
+        "name": "Microgravity",
+        "type": "Condition"
+      },
+      {
+        "name": "CDKN1a/p21 up-regulation",
+        "type": "Result"
+      },
+      {
+        "name": "Osteocytic osteolysis",
+        "type": "Mechanism"
+      },
+      {
+        "name": "3D-printed support jigs",
+        "type": "Method"
+      },
+      {
+        "name": "Electrical Impedance Myography (EIM)",
+        "type": "Method"
+      },
+      {
+        "name": "mBMPR1A-mFc treatment",
+        "type": "Intervention"
+      },
+      {
+        "name": "50-35000 Gy ionizing radiation",
+        "type": "Condition"
+      },
+      {
+        "name": "Trabecular bone volume reduction (-6.29%)",
+        "type": "Result"
+      },
+      {
+        "name": "Collagen fragmentation",
+        "type": "Result"
+      },
+      {
+        "name": "Partial weight suspension (PWS)",
+        "type": "Model"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Microgravity",
+        "target": "CDKN1a/p21 up-regulation",
+        "type": "causes"
+      },
+      {
+        "source": "Microgravity",
+        "target": "Osteocytic osteolysis",
+        "type": "induces"
+      },
+      {
+        "source": "3D-printed support jigs",
+        "target": "Fatigue life measurement precision",
+        "type": "improves"
+      },
+      {
+        "source": "EIM",
+        "target": "Muscle fiber size correlation",
+        "type": "correlates_with"
+      },
+      {
+        "source": "mBMPR1A-mFc treatment",
+        "target": "Bone mass retention",
+        "type": "enhances"
+      },
+      {
+        "source": "50-35000 Gy ionizing radiation",
+        "target": "Collagen fragmentation",
+        "type": "induces"
+      },
+      {
+        "source": "Collagen fragmentation",
+        "target": "Bone compressive strength reduction",
+        "type": "causes"
+      },
+      {
+        "source": "Partial weight suspension",
+        "target": "Muscle mass loss (-23%)",
+        "type": "induces"
+      },
+      {
+        "source": "Trabecular bone volume reduction (-6.29%)",
+        "target": "Microgravity",
+        "type": "result_of"
+      }
+    ]
+  },
+  "8": {
+    "cluster_summary": "This cluster examines microbial and host physiological adaptations to extreme environments and protein mechanistic studies, including spaceflight effects on bacterial virulence, MscL channel dynamics, and tardigrade desiccation tolerance.",
+    "topics": [
+      "Spaceflight microbiology and immune system impacts",
+      "Mechanosensitive ion channel biophysics",
+      "Extreme environment survival protein mechanisms"
+    ],
+    "entities": [
+      {
+        "name": "Rotating Wall Vessel",
+        "type": "Instrument"
+      },
+      {
+        "name": "Serratia marcescens Db11",
+        "type": "Organism"
+      },
+      {
+        "name": "Drosophila melanogaster",
+        "type": "Model Organism"
+      },
+      {
+        "name": "MscL (Mechanosensitive Channel of Large Conductance)",
+        "type": "Protein"
+      },
+      {
+        "name": "Tardigrade-specific Intrinsically Disordered Proteins (TDPs)",
+        "type": "Protein"
+      },
+      {
+        "name": "SAHS (Secretory-Abundant Heat Soluble) Proteins",
+        "type": "Protein"
+      },
+      {
+        "name": "Immunodeficiency (Imd) and Toll pathways",
+        "type": "Biosystem"
+      },
+      {
+        "name": "Disulfide-trapping technique",
+        "type": "Method"
+      },
+      {
+        "name": "Cytoplasmic bundle (CB) domain",
+        "type": "Structural Region"
+      },
+      {
+        "name": "Desiccation tolerance enhancement",
+        "type": "Result"
+      }
+    ],
+    "relations": [
+      {
+        "source": "Rotating Wall Vessel",
+        "target": "Serratia marcescens Db11",
+        "type": "alters_growth_conditions"
+      },
+      {
+        "source": "Spaceflight",
+        "target": "Serratia marcescens Db11",
+        "type": "increases_virulence"
+      },
+      {
+        "source": "MscL",
+        "target": "DrugReleaseDevice",
+        "type": "enables_function"
+      },
+      {
+        "source": "Tardigrade-specific Intrinsically Disordered Proteins",
+        "target": "Desiccation tolerance",
+        "type": "enhances"
+      },
+      {
+        "source": "Immunodeficiency (Imd) and Toll pathways",
+        "target": "Serratia marcescens resistance",
+        "type": "correlates_with"
+      },
+      {
+        "source": "Disulfide-trapping technique",
+        "target": "MscL oligomerization",
+        "type": "characterizes"
+      },
+      {
+        "source": "Cytoplasmic bundle domain modifications",
+        "target": "MscL pore conductance",
+        "type": "modulates"
+      },
+      {
+        "source": "SAHS Proteins",
+        "target": "Liposome stability",
+        "type": "protects"
+      },
+      {
+        "source": "Charged pore lumen",
+        "target": "MscL permeation",
+        "type": "affects"
+      }
+    ]
+  }
+}

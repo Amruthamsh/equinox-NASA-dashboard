@@ -20,8 +20,8 @@ export default function TopNav() {
     const activeLink = navRefs.current[activeIndex];
     if (activeLink) {
       setUnderlineStyle({
-        left: activeLink.offsetLeft,
-        width: activeLink.offsetWidth,
+        left: activeLink.offsetLeft + 12, // Adjust for padding
+        width: activeLink.offsetWidth - 20, // Adjust for padding
       });
     }
   }, [location]);
@@ -32,14 +32,14 @@ export default function TopNav() {
         {/* Left: Logo & Subtitle */}
         <div className="flex flex-col">
           <span
-            className="text-3xl font-extrabold tracking-widest bg-clip-text text-white"
+            className="text-3xl font-extrabold tracking-widest bg-clip-text text-yellow-400"
             style={{
               fontFamily: "'Orbitron', sans-serif",
             }}
           >
             EQUINOX
           </span>
-          <span className="text-gray-200 mt-1">
+          <span className="mt-1 text-lg text-purple-300">
             From Space Research to Mission Readiness
           </span>
         </div>
@@ -75,7 +75,7 @@ export default function TopNav() {
       </div>
 
       {/* Optional subtle space gradient */}
-      <div className="h-1 bg-gradient-to-r from-purple-700 via-pink-600 to-blue-500" />
+      <div className="h-0.5 bg-gradient-to-r from-purple-700 via-pink-600 to-blue-500" />
     </div>
   );
 }
