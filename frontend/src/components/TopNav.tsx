@@ -1,4 +1,6 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import "@fontsource/orbitron";
 
 const navItems = [
   { name: "Analytics", path: "/" },
@@ -7,25 +9,48 @@ const navItems = [
 ];
 
 export default function TopNav() {
+  const location = useLocation();
+  const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
+  const navRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  useEffect(() => {
+    const activeIndex = navItems.findIndex(
+      (item) => item.path === location.pathname
+    );
+    const activeLink = navRefs.current[activeIndex];
+    if (activeLink) {
+      setUnderlineStyle({
+        left: activeLink.offsetLeft,
+        width: activeLink.offsetWidth,
+      });
+    }
+  }, [location]);
+
   return (
-    <div className="bg-gray-900 text-white shadow-lg">
-      <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between">
+    <div className="bg-gray-900 text-white shadow-lg relative">
+      <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between relative">
         {/* Left: Logo & Subtitle */}
         <div className="flex flex-col">
-          <span className="text-2xl font-extrabold tracking-widest text-gradient bg-clip-text from-purple-400 via-pink-500 to-blue-400">
+          <span
+            className="text-3xl font-extrabold tracking-widest bg-clip-text text-white"
+            style={{
+              fontFamily: "'Orbitron', sans-serif",
+            }}
+          >
             EQUINOX
           </span>
-          <span className="text-gray-300 mt-1">
+          <span className="text-gray-200 mt-1">
             From Space Research to Mission Readiness
           </span>
         </div>
 
         {/* Right: Page Navigation */}
-        <div className="flex space-x-6">
-          {navItems.map((item) => (
+        <div className="flex space-x-6 relative">
+          {navItems.map((item, idx) => (
             <NavLink
               key={item.name}
               to={item.path}
+              ref={(el) => (navRefs.current[idx] = el)}
               className={({ isActive }) =>
                 `relative text-lg px-3 py-2 font-medium transition-colors duration-200 hover:text-purple-400 ${
                   isActive ? "text-purple-400" : "text-gray-300"
@@ -33,19 +58,21 @@ export default function TopNav() {
               }
             >
               {item.name}
-              {/** Active underline animation */}
-              <span
-                className={`absolute bottom-0 left-0 w-full h-0.5 bg-purple-400 transition-all ${
-                  window.location.pathname === item.path
-                    ? "scale-x-100"
-                    : "scale-x-0"
-                } origin-left`}
-              />
             </NavLink>
           ))}
+
+          {/* Animated underline */}
+          <span
+            className="absolute bottom-0 h-0.5 bg-purple-400 transition-all duration-300"
+            style={{
+              left: underlineStyle.left,
+              width: underlineStyle.width,
+            }}
+          />
         </div>
       </div>
-      {/** Optional: subtle space gradient background */}
+
+      {/* Optional subtle space gradient */}
       <div className="h-1 bg-gradient-to-r from-purple-700 via-pink-600 to-blue-500" />
     </div>
   );
