@@ -13,7 +13,7 @@ import {
 import { defaultMissionValues } from "../data/DefaultMissionValues";
 import { Info } from "lucide-react";
 
-export const MissionConfig = ({ mission, setMission }) => {
+export const MissionConfig = ({ mission, setMission, onSubmit }) => {
   const autofillMission = () => {
     const { type, phase, objective } = mission;
     const defaults = defaultMissionValues?.[type]?.[phase]?.[objective] || null;
@@ -69,8 +69,8 @@ export const MissionConfig = ({ mission, setMission }) => {
     ) {
       return alert("Please fill in all required fields.");
     }
-    // Here you would typically send the mission data to your backend or state management
-    alert("Mission submitted successfully!");
+
+    if (onSubmit) onSubmit(mission);
   };
 
   const tooltips = {

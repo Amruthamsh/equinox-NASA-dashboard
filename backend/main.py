@@ -13,6 +13,7 @@ from groq import Groq
 from config.config import groq_client, TAB_PROMPTS, category_names, category_texts
 from models.request_models import AskAIRequest
 from utils.df_utils import clean_text, generate_budget_summary_with_trends, generate_df_summary
+from models.mission_request import MissionRequest
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -182,3 +183,9 @@ def ask_ai(request: AskAIRequest, dataset: str = Query("bioscience", description
 def nasa_budget():
     """Return NASA budget data as JSON for React charts"""
     return df_nasa_budget.to_dict(orient="records")
+
+@app.post("/post-mission")
+def post_mission(request: MissionRequest):
+    mission_data = request.mission
+    # Here you would typically process the mission data, e.g., save it to a database
+    return JSONResponse(content={"message": "Mission data received", "data": mission_data})
