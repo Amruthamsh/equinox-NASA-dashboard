@@ -8,6 +8,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 from fastapi.responses import JSONResponse
 import os
 from itertools import product
+from fastapi import FastAPI, HTTPException
+from groq import Groq
+from config.config import groq_client, TAB_PROMPTS, category_names, category_texts
+from models.request_models import AskAIRequest
+from utils.df_utils import clean_text, generate_df_summary
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = FastAPI(title="NASA Bioscience API - Semantic Categorization")
 
@@ -19,32 +27,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-CATEGORIES = {
-    'Microgravity Effects': 'Experiments on gravity, weightlessness, and their effects on biological systems including physiological, cellular, and molecular responses to altered gravity.',
-    'Radiation Biology': 'Studies of cosmic radiation, particle exposure, and radiation effects on cells, organisms, and humans in space environments.',
-    'Plant & Microbial Biology': 'Plant growth, seeds, germination, agriculture, and microbial biology in space including microbiome studies and microbial adaptation to space conditions.',
-    'Human Physiology & Behavior': 'Human health and physiological studies, including cardiovascular, musculoskeletal, cognitive, and behavioral experiments on astronauts and crew.',
-    'Molecular & Cell Biology': 'Molecular, cellular, proteomic, genomic, and omics studies, covering gene expression, proteins, DNA, RNA, and cellular mechanisms in space.',
-    'Space Medicine': 'Medical interventions, therapies, treatments, and countermeasures for health risks associated with spaceflight and prolonged exposure to microgravity or radiation.',
-    'Life Support & Environment': 'Studies on air, water, waste management, and environmental control systems for sustaining life in spacecraft or habitats.',
-    'Space Systems & Instrumentation': 'Development and testing of devices, instruments, hardware, and experimental technologies used in space research and bioscience experiments.',
-    'Synthetic Biology & Tissue Engineering': 'Tissue growth and synthetic biology in space Engineering tissues, organoids, or synthetic biological systems, including growth and manipulation of biological samples in space.'
-}
-
-category_names = list(CATEGORIES.keys())
-category_texts = [CATEGORIES[c] for c in category_names]
-
 DATA_DIR = "data"
 
 INPUT_FILE = os.path.join(DATA_DIR, "extracted_all_with_sections.csv")
 df = pd.read_csv(INPUT_FILE)
-
-def clean_text(text):
-    if pd.isna(text) or not str(text).strip():
-        return ""
-    text = re.sub(r"[^\w\s]", " ", str(text))
-    text = re.sub(r"\s+", " ", text)
-    return text.lower().strip()
 
 df["clean_full_text"] = (
     df["Title"].fillna("")
@@ -83,7 +69,6 @@ def get_all_papers():
     clean_df = clean_df.drop(columns=["clean_full_text"])
     return JSONResponse(content=clean_df.to_dict(orient="records"))
 
-
 @app.get("/research-evolution")
 def get_research_evolution():
     """Return category evolution over time with zero-filled missing categories."""
@@ -103,5 +88,58 @@ def get_research_evolution():
     pivot_df = merged.pivot(index="year", columns="primary_category", values="count").reset_index()
 
     return JSONResponse(content=pivot_df.to_dict(orient="records"))
+
+@app.get("/ai-tabs")
+def get_ai_tabs():
+    df_summary = generate_df_summary(df)
+    tab_results = {}
+    for tab, prompt in TAB_PROMPTS.items():
+        full_prompt = f"""
+                Answer the following question based on the data:
+                {prompt}
+                Here is the recent NASA bioscience data:
+                {df_summary} 
+                Provide answer within 150 words. Return only the answer, no other text. 
+                Do not mention the data source. 
+                Don't add any disclaimers or commentary.
+                """
+        try:
+            response_summary = groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[
+                        {"role": "user", "content": full_prompt}
+                    ]
+                )
+            content = response_summary.choices[0].message.content.strip()
+
+            tab_results[tab] = content
+        except Exception as e:
+            tab_results[tab] = f"Error fetching AI content: {str(e)}"
+    return JSONResponse(content=tab_results)
+
+@app.post("/ask-ai")
+def ask_ai(request: AskAIRequest):
+    df_summary = generate_df_summary(df)
+    user_question = request.question
+    full_prompt = f"""
+        Answer the following question based on the data:
+        {user_question}
+        Here is the recent NASA bioscience data:
+        {df_summary} 
+        Provide answer within 150 words. Return only the answer, no other text. 
+        Do not mention the data source. 
+        Don't add any disclaimers or commentary.
+        """
+    try:
+        response_summary = groq_client.chat.completions.create(
+                    model="llama-3.1-8b-instant",
+                    messages=[
+                        {"role": "user", "content": full_prompt}
+                    ]
+                )
+        content = response_summary.choices[0].message.content.strip()
+        return JSONResponse(content={"answer": content})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI request failed: {str(e)}")
 
 
