@@ -1,10 +1,14 @@
+import PapersTable from "@/components/PapersTable";
 import ResearchEvolutionChart from "@/components/ResearchEvolutionOverTime";
-import React from "react";
 
 const Analytics = () => {
   return (
     <div className="p-6 bg-gray-800 min-h-screen text-white">
-      <ResearchEvolutionChart />
+      <div className="flex flex-col gap-8">
+        {" "}
+        <ResearchEvolutionChart />
+        <PapersTable />
+      </div>
     </div>
   );
 };

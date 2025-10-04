@@ -56,7 +56,10 @@ export default function ResearchEvolutionChart() {
     } else {
       axios.get("http://localhost:8000/ai-tabs").then((res) => {
         setTabContent(res.data);
-        localStorage.setItem("aiTabs", JSON.stringify(res.data));
+        localStorage.setItem(
+          "aiTabs_ResearchEvolution",
+          JSON.stringify(res.data)
+        );
       });
     }
   }, []);
@@ -83,7 +86,10 @@ export default function ResearchEvolutionChart() {
       setAskAnswer(answer);
 
       const updatedAnswers = { ...storedAnswers, [askQuestion]: answer };
-      localStorage.setItem("askAI", JSON.stringify(updatedAnswers));
+      localStorage.setItem(
+        "askAI_ResearchEvolution",
+        JSON.stringify(updatedAnswers)
+      );
     } catch (err) {
       console.error(err);
       setAskAnswer("Error fetching AI answer.");
