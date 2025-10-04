@@ -10,10 +10,11 @@ import os
 from itertools import product
 from fastapi import FastAPI, HTTPException
 from groq import Groq
-from config.config import groq_client, TAB_PROMPTS, category_names, category_texts
+from config.config import groq_client, TAB_PROMPTS, category_names, category_texts, tooltips
 from models.request_models import AskAIRequest
 from utils.df_utils import clean_text, generate_budget_summary_with_trends, generate_df_summary
 from models.mission_request import MissionRequest
+from utils.LLM_utils import generate_mission_summary
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -187,5 +188,30 @@ def nasa_budget():
 @app.post("/post-mission")
 def post_mission(request: MissionRequest):
     mission_data = request.mission
-    # Here you would typically process the mission data, e.g., save it to a database
-    return JSONResponse(content={"message": "Mission data received", "data": mission_data})
+
+    # Generate a semantic summary using Groq
+    mission_summary = generate_mission_summary(mission_data)
+
+    # Generate embedding
+    mission_embedding = embedding_model.encode(mission_summary, convert_to_numpy=True)
+
+    # Compute similarity with papers
+    similarities = cosine_similarity(text_embeddings, mission_embedding.reshape(1, -1)).flatten()
+
+    # Retrieve top 5 most similar papers
+    top_idxs = np.argsort(similarities)[::-1][:5]
+    top_papers = df.iloc[top_idxs].to_dict(orient="records")
+    top_scores = similarities[top_idxs].tolist()
+
+    results = [
+        {"title": paper.get("Title"), "link": paper.get("Link"), "similarity": float(score)}
+        for paper, score in zip(top_papers, top_scores)
+    ]
+
+    return JSONResponse(content={
+        "message": "Mission data processed and top papers retrieved",
+        "mission": mission_data,
+        "semantic_summary": mission_summary,  
+        "tooltips": tooltips,
+        "top_papers": results
+    })
