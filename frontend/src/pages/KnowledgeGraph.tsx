@@ -452,7 +452,7 @@ export default function KnowledgeGraphDashboard() {
         <ForceGraph2D
           graphData={graphData}
           nodeLabel={(node) =>
-            `${node.label}\nType: ${node.type}${
+            `${node.label}\n: ${node.type}${
               node.entityType ? `\nEntity: ${node.entityType}` : ""
             }`
           }

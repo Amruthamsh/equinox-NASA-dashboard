@@ -32,14 +32,14 @@ export default function TopNav() {
         {/* Left: Logo & Subtitle */}
         <div className="flex flex-col">
           <span
-            className="text-3xl font-extrabold tracking-widest bg-clip-text text-yellow-400"
+            className="text-3xl font-extrabold tracking-widest bg-clip-text text-blue-400"
             style={{
               fontFamily: "'Orbitron', sans-serif",
             }}
           >
             EQUINOX
           </span>
-          <span className="mt-1 text-lg text-purple-300">
+          <span className="mt-1 text-lg text-gray-200">
             From Space Research to Mission Readiness
           </span>
         </div>

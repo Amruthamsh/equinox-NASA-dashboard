@@ -27,9 +27,6 @@ def extract_json_from_text(text: str):
                 return None
     return None
 
-# ===============================
-# CONFIG
-# ===============================
 DATA_DIR = "data"
 
 DATA_FILE = os.path.join(DATA_DIR, "extracted_all_with_sections.csv")
@@ -42,9 +39,7 @@ MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 # GROQ_MODEL = "llama-3.3-70b-versatile"
 GROQ_MODEL = "qwen/qwen3-32b"
 
-# ===============================
-# 1. Load and Preprocess Data
-# ===============================
+
 print("📂 Loading data...")
 df = pd.read_csv(DATA_FILE)
 
@@ -61,9 +56,7 @@ df["clean_full_text"] = (
 
 print(f"Loaded {len(df)} papers ✅")
 
-# ===============================
-# 2. Embeddings & Clustering
-# ===============================
+
 print("🧠 Loading embedding model...")
 embedding_model = SentenceTransformer(MODEL_NAME)
 
@@ -80,9 +73,7 @@ for i in range(NUM_CLUSTERS):
     cluster_embeddings.append(text_embeddings[df["cluster"] == i].mean(axis=0))
 cluster_embeddings = np.vstack(cluster_embeddings)
 
-# ===============================
-# 3. Summarize Each Cluster (LLM)
-# ===============================
+
 print("💬 Summarizing clusters via Groq LLM...")
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
@@ -139,9 +130,7 @@ Return **only JSON** in this format:
 # save cluster outputs for inspection
 with open(os.path.join(DATA_DIR, "cluster_summaries.json"), "w") as f:
     json.dump(cluster_outputs, f, indent=2)
-# ===============================
-# 4. Push to Neo4j (Updated for Papers, Impacts, and Results)
-# ===============================
+
 print("🕸️ Connecting to Neo4j...")
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASS))
 
