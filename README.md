@@ -12,6 +12,14 @@ The platform is organized into three key modules:
 
 2. **Knowledge Graph (KG)** – A dynamic, AI-generated graph built using NLP and topic modeling (e.g., BERTopic) to cluster related research papers. Users can interact with clusters, view summaries, compare experiments, and ask natural language questions to reveal relationships, insights, and visual analytics.
 
-3. **Plan Mission** – Integrates insights from the research and funding data to guide mission design (e.g., Mars, Moon). It links studies to NASA Task Book grants and highlights which research areas support specific mission components.
+3. **Plan Mission** – Integrates insights from the research data to guide mission design (e.g., Mars, Moon, Asteroid). User can set the Mission Paramenters, provide additional context to plan a mission. The dashboard Methodologies, Actionable Insights and fetches the Relevant publications for the given Mission. 
 
-Overall, the system “solves” the challenge of **navigating and interpreting NASA’s complex research landscape** by making it **interactive, explainable, and actionable**. It empowers users to uncover hidden connections, identify funding gaps, and make informed strategic decisions — ultimately accelerating innovation and improving mission planning.
+Overall, the system “solves” the challenge of **navigating and interpreting NASA’s complex research landscape** by making it **interactive, explainable, and actionable**. It empowers users to learn and explore NASA's vast data, uncover hidden connections, identify funding gaps, and make informed strategic decisions — ultimately accelerating curiosity, innovation and improving mission planning.
+
+## Project Details
+
+## Use of AI
+
+## Space Agency Data
+
+## References
