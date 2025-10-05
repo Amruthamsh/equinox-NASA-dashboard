@@ -57,7 +57,7 @@ The system “solves” the challenge of **navigating and interpreting NASA’s 
 The ultimate aim is to accelerate discovery and mission readiness by turning NASA’s fragmented research data into a living knowledge system.
 We hope Equinox inspires users to ask new questions, uncover overlooked opportunities, and shape the future of space exploration through informed insights.
 
-<img width="3024" height="1806" alt="image" src="https://github.com/user-attachments/assets/40c76a79-3de8-4bf9-a62c-3763547d0f9d" />
+<img width="3024" height="1806" alt="image" src="https://github.com/user-attachments/assets/8678c40a-0886-4df8-9878-732f058ed12b" />
 
 ## Project Details
 
