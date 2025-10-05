@@ -1,7 +1,14 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
+import { Button } from "./ui/button";
+import { CopyButton } from "./CopyButton";
 
-export const MissionInsights = ({ mission, insights }) => {
+export const MissionInsights = ({
+  mission,
+  insights,
+  ExportMissionDetailsAsPdf,
+  loadingPdf,
+}) => {
   const { missionInsight, tooltips, topPapers } = insights;
 
   return (
@@ -10,55 +17,29 @@ export const MissionInsights = ({ mission, insights }) => {
         Mission Insights
       </h2>
 
-      {/* Mission Summary Card */}
+      {/* Mission Summary */}
       <div className="p-6 bg-gray-800 rounded-2xl shadow-xl border border-gray-700 hover:shadow-pink-500/20 transition-shadow duration-300">
         <h3 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">
           Mission Summary
         </h3>
         <div className="flex flex-col gap-3 text-gray-200">
-          {/* Type */}
-          <div className="flex items-center gap-2">
-            <span className="font-bold w-24">Type:</span>
-            <span className="flex-1">{mission.type}</span>
-            {tooltips?.type && (
-              <span
-                title={tooltips.type}
-                className="cursor-help text-gray-400 hover:text-gray-200 transition-colors"
-              >
-                🛈
+          {["type", "objective", "phase"].map((field) => (
+            <div key={field} className="flex items-center gap-2">
+              <span className="font-bold w-24">
+                {field.charAt(0).toUpperCase() + field.slice(1)}:
               </span>
-            )}
-          </div>
+              <span className="flex-1">{mission[field]}</span>
+              {tooltips?.[field] && (
+                <span
+                  title={tooltips[field]}
+                  className="cursor-help text-gray-400 hover:text-gray-200 transition-colors"
+                >
+                  🛈
+                </span>
+              )}
+            </div>
+          ))}
 
-          {/* Objective */}
-          <div className="flex items-center gap-2">
-            <span className="font-bold w-24">Objective:</span>
-            <span className="flex-1">{mission.objective}</span>
-            {tooltips?.objective && (
-              <span
-                title={tooltips.objective}
-                className="cursor-help text-gray-400 hover:text-gray-200 transition-colors"
-              >
-                🛈
-              </span>
-            )}
-          </div>
-
-          {/* Phase */}
-          <div className="flex items-center gap-2">
-            <span className="font-bold w-24">Phase:</span>
-            <span className="flex-1">{mission.phase}</span>
-            {tooltips?.phase && (
-              <span
-                title={tooltips.phase}
-                className="cursor-help text-gray-400 hover:text-gray-200 transition-colors"
-              >
-                🛈
-              </span>
-            )}
-          </div>
-
-          {/* Summary */}
           <div className="flex flex-col gap-1 mt-2">
             <span className="font-bold">Summary:</span>
             <p className="text-gray-300 whitespace-pre-line">
@@ -68,22 +49,30 @@ export const MissionInsights = ({ mission, insights }) => {
         </div>
       </div>
 
-      {/* Semantic Summary Card */}
+      {/* Learnings */}
       <div className="p-6 bg-gray-800 rounded-2xl shadow-xl border border-gray-700 hover:shadow-purple-500/20 transition-shadow duration-300">
         <h3 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">
           Learnings from Research
         </h3>
-
-        <p className="text-gray-200 whitespace-pre-line">
-          {missionInsight ? (
+        {missionInsight ? (
+          <div className="text-gray-200">
             <ReactMarkdown>{missionInsight}</ReactMarkdown>
-          ) : (
-            "No learnings from research available."
-          )}
-        </p>
+            <div className="flex flex-row justify-end gap-4 mt-4">
+              <CopyButton textToCopy={missionInsight} />
+              <Button
+                onClick={ExportMissionDetailsAsPdf}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                {loadingPdf ? "Generating PDF..." : "Export as PDF"}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-400">No learnings from research available.</p>
+        )}
       </div>
 
-      {/* Relevant Publications Card */}
+      {/* Publications */}
       <div className="p-6 bg-gray-800 rounded-2xl shadow-xl border border-gray-700 hover:shadow-blue-500/20 transition-shadow duration-300">
         <h3 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">
           Relevant Publications

@@ -19,6 +19,7 @@ export default function MissionPlanner() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [loadingPdf, setLoadingPdf] = useState(false);
 
   const handleSubmit = () => {
     setLoading(true);
@@ -26,11 +27,9 @@ export default function MissionPlanner() {
     axios
       .post("http://localhost:8000/post-mission", { mission })
       .then((response) => {
-        console.log("Response from server:", response.data);
-
         const data = response.data;
 
-        // Update mission with any returned fields
+        // Update mission with returned fields
         setMission((prev) => ({
           ...prev,
           ...data.mission,
@@ -38,18 +37,56 @@ export default function MissionPlanner() {
           additionalContext: data.mission.additionalContext || "",
         }));
 
-        // Update insights with mission insight, tooltips, and top papers
+        // Update insights
         setInsights({
-          missionInsight: data.mission_insight,
-          tooltips: data.tooltips,
-          topPapers: data.top_papers,
+          missionInsight: data.mission_insight || "",
+          tooltips: data.tooltips || {},
+          topPapers: data.top_papers || [],
         });
       })
       .catch((error) => {
         console.error("Error submitting mission:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
+  };
 
-    setLoading(false);
+  // Export PDF function
+  const handleExportPdf = async () => {
+    setLoadingPdf(true);
+    try {
+      const payload = {
+        mission, // { type, phase, objective, summary, additionalContext }
+        insights: {
+          missionInsight: insights.missionInsight || "",
+        },
+        topPapers: insights.topPapers || [],
+        tooltips: insights.tooltips || {},
+      };
+
+      console.log("Generating PDF with payload:", payload);
+
+      const response = await axios.post(
+        "http://localhost:8000/generate-pdf",
+        payload,
+        { responseType: "blob" }
+      );
+
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: "application/pdf" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "mission-details.pdf");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setLoadingPdf(false);
+    }
   };
 
   return (
@@ -60,19 +97,24 @@ export default function MissionPlanner() {
           mission={mission}
           setMission={setMission}
           onSubmit={handleSubmit}
+          loading={loading}
         />
       </div>
 
       {/* Right Panel */}
-      {loading ? (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50">
-          <span className="text-white">Loading...</span>
-        </div>
-      ) : (
-        <div className="flex-1 p-6 overflow-y-auto">
-          <MissionInsights mission={mission} insights={insights} />
-        </div>
-      )}
+      <div className="flex-1 p-6 overflow-y-auto relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75 z-50">
+            <span className="text-white">Loading...</span>
+          </div>
+        )}
+        <MissionInsights
+          mission={mission}
+          insights={insights}
+          ExportMissionDetailsAsPdf={handleExportPdf}
+          loadingPdf={loadingPdf}
+        />
+      </div>
     </div>
   );
 }

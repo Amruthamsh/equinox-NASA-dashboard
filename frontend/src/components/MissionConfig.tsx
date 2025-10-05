@@ -52,21 +52,22 @@ export const MissionConfig = ({ mission, setMission, onSubmit }) => {
   };
 
   const handleSubmit = () => {
+    console.log("Submitting mission:", mission);
     if (
-      !mission.type ||
-      !mission.phase ||
-      !mission.objective ||
-      !mission.deltaV ||
-      !mission.duration ||
-      !mission.fuel ||
-      !mission.payload ||
-      !mission.crew ||
-      !mission.commsLatency ||
-      !mission.gravity ||
-      !mission.radDose ||
-      !mission.power_kW ||
-      !mission.edlDifficulty ||
-      !mission.coordinates
+      mission.type === "" ||
+      mission.phase === "" ||
+      mission.objective === "" ||
+      mission.deltaV === undefined ||
+      mission.duration === undefined ||
+      mission.fuel === undefined ||
+      mission.payload === undefined ||
+      mission.crew === undefined ||
+      mission.commsLatency === undefined ||
+      mission.gravity === undefined ||
+      mission.radDose === undefined ||
+      mission.power_kW === undefined ||
+      mission.edlDifficulty === undefined ||
+      mission.coordinates === ""
     ) {
       return alert("Please fill in all required fields.");
     }

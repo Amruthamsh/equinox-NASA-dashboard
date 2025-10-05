@@ -13,8 +13,15 @@ from groq import Groq
 from config.config import groq_client, TAB_PROMPTS, category_names, category_texts, tooltips
 from models.request_models import AskAIRequest
 from utils.df_utils import clean_text, generate_budget_summary_with_trends, generate_df_summary
-from models.mission_request import MissionRequest
-from utils.LLM_utils import generate_mission_summary
+from models.mission_request import MissionRequest, MissionData, Paper
+from utils.LLM_utils import generate_mission_summary, parse_markdown
+from io import BytesIO
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_LEFT
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -243,3 +250,67 @@ def post_mission(request: MissionRequest):
         "mission_insight": mission_insight,  
         "top_papers": results
     })
+
+@app.post("/generate-pdf")
+async def generate_pdf(data: MissionData):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=30,
+        leftMargin=30,
+        topMargin=30,
+        bottomMargin=18
+    )
+    styles = getSampleStyleSheet()
+    normal = styles['Normal']
+    normal.alignment = TA_LEFT
+    elements = []
+
+    # Title
+    elements.append(Paragraph("Mission Details", styles['Title']))
+    elements.append(Spacer(1, 12))
+
+    # Mission Information
+    elements.append(Paragraph("Mission Information:", styles['Heading2']))
+    for key, val in data.mission.items():
+        elements.append(Paragraph(f"<b>{key}:</b> {val}", normal))
+    elements.append(Spacer(1, 12))
+
+    # Mission Insights
+    elements.append(Paragraph("Mission Insights:", styles['Heading2']))
+    mission_insight = data.insights.get("missionInsight") or "No insights available."
+    mission_insight = parse_markdown(mission_insight)
+    elements.append(Paragraph(mission_insight, normal))
+    elements.append(Spacer(1, 12))
+
+    # Relevant Publications
+    elements.append(Paragraph("Relevant Publications:", styles['Heading2']))
+    if data.topPapers:
+        for paper in data.topPapers:
+            if paper.link:
+                elements.append(
+                    Paragraph(f'<a href="{paper.link}">{paper.title}</a>', normal)
+                )
+            else:
+                elements.append(Paragraph(paper.title, normal))
+            elements.append(Spacer(1, 2))
+    else:
+        elements.append(Paragraph("No relevant publications found.", normal))
+    elements.append(Spacer(1, 12))
+
+    # Tooltips / Notes
+    if data.tooltips:
+        elements.append(Paragraph("Tooltips / Notes:", styles['Heading2']))
+        for key, val in data.tooltips.items():
+            elements.append(Paragraph(f"<b>{key}:</b> {val}", normal))
+        elements.append(Spacer(1, 12))
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=mission-details.pdf"}
+    )

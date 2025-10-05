@@ -48,3 +48,8 @@ def clean_groq_summary(summary: str) -> str:
     # Strip leading/trailing whitespace
     summary = summary.strip()
     return summary
+
+def parse_markdown(text: str) -> str:
+    text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
+    text = text.replace('\n', '<br/>')
+    return text
