@@ -50,7 +50,7 @@ The system transforms static data into an interactive, explainable, and curiosit
 
 ## Use of AI
 
-ChatGPT (Free), GitHub Copilot, and Claude (Free) were used to assist with coding, debugging, and error resolution, with no paid AI models employed. We used AI for budget Analysis which was then manually verified. 
+ChatGPT (Free), GitHub Copilot, and Claude (Free) were used to assist with coding, debugging, and error resolution, with no paid AI models employed. We used Perplexity (Free) for budget Analysis which was then manually verified. 
 
 ## Space Agency Data
 
@@ -71,17 +71,26 @@ This open NASA dataset inspired the project by providing reliable, mission-relev
 
 ## Sources for budget analysis
 
-1. [NASA Annual Budget Documents (FY 2024)](https://www.nasa.gov/wp-content/uploads/2023/03/nasa-fy-2024-cj-v3.pdf)
-2. [Planetary Society NASA Budget Data](https://www.planetary.org/space-policy/nasa-budget)
-3. [Our World in Data: NASA Annual Budget](https://ourworldindata.org/grapher/nasa-annual-budget)
-4. [NASA Budget Plans & Reports](https://www.nasa.gov/budgets-plans-and-reports/)
-5. [NASA Value of NASA Report](https://www.nasa.gov/value-of-nasa/)
-6. [NASA Historical Budget PDFs](https://www.nasa.gov/wp-content/uploads/2023/12/o45128943-1983-1.pdf)
-7. [Statista: NASA Budget by Program Category 2000–2009](https://www.statista.com/statistics/1024446/distribution-nasa-budget-2000-2009/)
-8. [NASA Budget History PDF](https://www.lpi.usra.edu/exploration/multimedia/NASABudgetHistory.pdf)
-9. [NASA FY 2000 Performance Report](https://www.nasa.gov/wp-content/uploads/2023/10/fy-2000-performance-report.pdf)
-10. [Wikipedia: Budget of NASA](https://en.wikipedia.org/wiki/Budget_of_NASA)
-
+1. https://en.wikipedia.org/wiki/Budget_of_NASA
+2. https://www.planetary.org/space-policy/every-nasa-budget-request
+3. https://www.nasa.gov/budgets-plans-and-reports/
+4. https://www.universetoday.com/articles/nasas-fy-2026-budget-request-has-been-released
+5. https://www.nasa.gov/wp-content/uploads/2025/05/fy-2026-budget-technical-supplement-002.pdf
+6. https://www.planetary.org/articles/nasa-2026-budget-proposal-in-charts
+7. https://aas.org/posts/news/2025/06/fy26-presidents-budget-request
+8. https://www.planetary.org/space-policy/nasa-budget
+9. https://www.nasa.gov/fy-2026-budget-request/
+10. https://www.nasa.gov/wp-content/uploads/2023/12/o45128943-1983-1.pdf
+11. https://ourworldindata.org/grapher/nasa-annual-budget
+12. https://www.planetary.org/charts/nasa-budget-plot
+13. https://www.nasa.gov/value-of-nasa/
+14. https://www.nasa.gov/news-release/nasa-report-details-how-agency-significantly-benefits-us-economy/
+15. https://www.nasa.gov/wp-content/uploads/2025/05/fy2026-budget-request-summary-briefing-finalv2-05292025-430pm.pdf
+16. https://docs.google.com/spreadsheets/d/1NMRYCCRWXwpn3pZU57-Bb0P1Zp3yg2lTTVUzvc5GkIs/edit
+17. https://www.reddit.com/r/space/comments/a5k7a0/the_nasa_budget_peaked_at_441_of_the_us_federal/
+18. https://aas.org/posts/news/2025/07/house-fy2026-appropriations-report-nasa-nsf-and-doe-details
+19. https://www.lpi.usra.edu/exploration/multimedia/NASABudgetHistory.pdf
+20. https://www.congress.gov/crs-product/R43419
 
 ## References
 
