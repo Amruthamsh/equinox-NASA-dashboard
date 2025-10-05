@@ -22,8 +22,10 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from fastapi.responses import StreamingResponse
+import json
 from dotenv import load_dotenv
 load_dotenv()
+from fastapi.staticfiles import StaticFiles
 
 
 app = FastAPI(title="NASA Bioscience API - Semantic Categorization")
@@ -35,6 +37,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/paper_images", StaticFiles(directory="./data/paper_images"), name="paper_images")
 
 DATA_DIR = "data"
 
@@ -66,6 +70,41 @@ print("🪐 Performing semantic categorization...")
 similarities = cosine_similarity(text_embeddings, category_embeddings)
 best_idxs = np.argmax(similarities, axis=1)
 df["primary_category"] = [category_names[i] for i in best_idxs]
+
+
+IMAGE_METADATA_FILE = "./data/paper_images_metadata.json"
+
+with open(IMAGE_METADATA_FILE, "r", encoding="utf-8") as f:
+    all_images_metadata = json.load(f)
+
+# Compute embeddings for caption + description
+image_texts = [
+    (f"{img['caption']} {img.get('description', '')}").strip()
+    for img in all_images_metadata
+]
+
+print(f"🔹 Generating embeddings for {len(image_texts)} images...")
+image_embeddings = embedding_model.encode(image_texts, convert_to_numpy=True)
+print("✅ Image embeddings ready.")
+
+def get_top_images(mission_summary, top_k=3):
+    mission_embedding = embedding_model.encode(mission_summary, convert_to_numpy=True)
+
+    similarities = cosine_similarity(image_embeddings, mission_embedding.reshape(1, -1)).flatten()
+    top_idxs = np.argsort(similarities)[::-1][:top_k]
+
+    top_images = []
+    for idx in top_idxs:
+        img = all_images_metadata[idx]
+        image_url = f"/paper_images/{img['image'].split('/')[-1]}"  # relative URL for frontend
+        top_images.append({
+            "image": image_url,
+            "caption": img.get("caption", ""),
+            "description": img.get("description", ""),
+            "pdf": img.get("pdf", "")
+        })
+
+    return top_images
 
 # Load NASA budget data
 BUDGET_FILE = os.path.join(DATA_DIR, "NASABudgetMilestonesDataset.csv")
@@ -196,21 +235,20 @@ def nasa_budget():
 def post_mission(request: MissionRequest):
     mission_data = request.mission
 
+    # Generate mission summary
     mission_summary = generate_mission_summary(mission_data)
 
+    # Compute mission embedding
     mission_embedding = embedding_model.encode(mission_summary, convert_to_numpy=True)
 
+    # Get top papers
     similarities = cosine_similarity(text_embeddings, mission_embedding.reshape(1, -1)).flatten()
-
     top_idxs = np.argsort(similarities)[::-1][:5]
     top_papers = df.iloc[top_idxs].to_dict(orient="records")
     top_scores = similarities[top_idxs].tolist()
 
-    paper_content = ""
-
-    for paper in top_papers:
-        paper_content += f"{paper.get('clean_full_text')}\n\n"
-
+    # LLM insights
+    paper_content = "\n\n".join([paper.get("clean_full_text", "") for paper in top_papers])
     groq_input = f"""
     You are given a set of research papers:
 
@@ -223,32 +261,33 @@ def post_mission(request: MissionRequest):
     - Identify key themes, trends, and insights from the papers.
     - Summarize the findings in concise, informative points.
     - Highlight notable methodologies, results, or conclusions.
-    - Provide insights relevant to the mission context.
-    - Each insight should be actionable or informative for mission planning or research.
+    - Provide insights relevant to the mission.
     - Return the insights as a numbered list in Markdown format.
-    - Each insight should be 1-2 sentences max.
-    - Avoid disclaimers or unrelated commentary like "This is based on the provided research papers." or "Here is the summary in markdown format."
-    - Use proper Markdown syntax (numbers or dashes, bold for key terms if needed).
     """
-
     response_summary = groq_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[
-                    {"role": "user", "content": groq_input}
-                ]
-            )
+        model="llama-3.1-8b-instant",
+        messages=[{"role": "user", "content": groq_input}]
+    )
     mission_insight = response_summary.choices[0].message.content.strip()
 
+    # Get top images
+    top_images = get_top_images(mission_summary, top_k=3)
+
     results = [
-        {"title": paper.get("Title"), "link": paper.get("Link"), "similarity": float(score)}
+        {
+            "title": paper.get("Title"),
+            "link": paper.get("Link"),
+            "similarity": float(score),
+        }
         for paper, score in zip(top_papers, top_scores)
     ]
 
     return JSONResponse(content={
-        "message": "Mission data processed and top papers retrieved",
+        "message": "Mission processed successfully",
         "mission": mission_data,
-        "mission_insight": mission_insight,  
-        "top_papers": results
+        "mission_insight": mission_insight,
+        "top_papers": results,
+        "top_images": top_images
     })
 
 @app.post("/generate-pdf")

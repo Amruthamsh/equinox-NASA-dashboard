@@ -15,6 +15,7 @@ export default function MissionPlanner() {
   const [insights, setInsights] = useState({
     missionInsight: "",
     topPapers: [],
+    topImages: [], // <-- updated
     tooltips: {},
   });
 
@@ -29,7 +30,6 @@ export default function MissionPlanner() {
       .then((response) => {
         const data = response.data;
 
-        // Update mission with returned fields
         setMission((prev) => ({
           ...prev,
           ...data.mission,
@@ -37,35 +37,27 @@ export default function MissionPlanner() {
           additionalContext: data.mission.additionalContext || "",
         }));
 
-        // Update insights
         setInsights({
           missionInsight: data.mission_insight || "",
           tooltips: data.tooltips || {},
           topPapers: data.top_papers || [],
+          topImages: data.top_images || [], // <-- updated
         });
       })
-      .catch((error) => {
-        console.error("Error submitting mission:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((error) => console.error("Error submitting mission:", error))
+      .finally(() => setLoading(false));
   };
 
-  // Export PDF function
   const handleExportPdf = async () => {
     setLoadingPdf(true);
     try {
       const payload = {
-        mission, // { type, phase, objective, summary, additionalContext }
-        insights: {
-          missionInsight: insights.missionInsight || "",
-        },
+        mission,
+        insights: { missionInsight: insights.missionInsight || "" },
         topPapers: insights.topPapers || [],
+        topImages: insights.topImages || [], // <-- include images in PDF
         tooltips: insights.tooltips || {},
       };
-
-      console.log("Generating PDF with payload:", payload);
 
       const response = await axios.post(
         "http://localhost:8000/generate-pdf",

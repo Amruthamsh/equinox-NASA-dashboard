@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "./ui/button";
 import { CopyButton } from "./CopyButton";
+import TopImagesGrid from "./TopImagesGrid";
 
 export const MissionInsights = ({
   mission,
@@ -9,7 +10,15 @@ export const MissionInsights = ({
   ExportMissionDetailsAsPdf,
   loadingPdf,
 }) => {
-  const { missionInsight, tooltips, topPapers } = insights;
+  const { missionInsight, tooltips, topPapers, topImages } = insights;
+  const [showFull, setShowFull] = useState(false);
+
+  // Truncate markdown for preview
+  const previewLength = 500;
+  const previewText = missionInsight
+    ? missionInsight.slice(0, previewLength) +
+      (missionInsight.length > previewLength ? "..." : "")
+    : "";
 
   return (
     <div className="space-y-10">
@@ -54,9 +63,26 @@ export const MissionInsights = ({
         <h3 className="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">
           Learnings from Research
         </h3>
+
         {missionInsight ? (
-          <div className="text-gray-200">
-            <ReactMarkdown>{missionInsight}</ReactMarkdown>
+          <div className="text-gray-200 flex flex-col gap-4">
+            <ReactMarkdown>
+              {showFull ? missionInsight : previewText}
+            </ReactMarkdown>
+
+            {missionInsight.length > previewLength && (
+              <button
+                onClick={() => setShowFull(!showFull)}
+                className="text-blue-400 hover:text-blue-300 font-medium"
+              >
+                {showFull ? "Show Less" : "Show More"}
+              </button>
+            )}
+
+            <hr className="border-blue-300 my-4" />
+
+            <TopImagesGrid topImages={topImages} />
+
             <div className="flex flex-row justify-end gap-4 mt-4">
               <CopyButton textToCopy={missionInsight} />
               <Button
