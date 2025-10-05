@@ -1,4 +1,4 @@
-## Equinox: From Space Research to Mission Readiness
+# Equinox — From Space Research to Mission Readiness
 
 ## Project Summary
 
