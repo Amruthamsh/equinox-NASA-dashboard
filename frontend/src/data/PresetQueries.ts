@@ -16,7 +16,14 @@ export const PRESET_QUERIES = {
       "High-level view of research topics covered by NASA publications",
     category: "overview",
   },
-
+  "Paper Report": {
+    query: `
+      MATCH (p:Paper)-[r:REPORTS]->(e:Entity)
+      RETURN p, r, e LIMIT 2000
+    `,
+    description: "Papers and their reported entities",
+    category: "overview",
+  },
   // Impact & Results Queries
   //   "Experimental Results Network": {
   //     query: `
@@ -29,16 +36,20 @@ export const PRESET_QUERIES = {
   //     description: "Papers and their experimental results with methods",
   //     category: "results",
   //   },
-  //   "Method-Result Chains": {
-  //     query: `
-  //       MATCH (method:Entity)-[r1:RELATION]->(result:Entity)
-  //       WHERE method.type = "Method" AND result.type IN ["Result", "Quantitative Result"]
-  //       OPTIONAL MATCH (p:Paper)-[r2:REPORTS]->(result)
-  //       RETURN method, r1, result, r2, p LIMIT 150
+  // "Method-Result Chains": {
+  //   query: `
+  //       MATCH path = (m:Entity)-[r:RELATION*1..3]->(res:Entity)
+  //       WHERE m.type = "Method"
+  //       AND res.type IN ["Result", "Quantitative Result"]
+  //       WITH m, res, r, length(path) as pathLength
+  //       ORDER BY pathLength LIMIT 100
+  //       UNWIND r as rel
+  //       MATCH (source)-[rel]->(target)
+  //       RETURN source, rel, target
   //     `,
-  //     description: "Methods leading to specific results",
-  //     category: "results",
-  //   },
+  //   description: "Methods leading to specific results",
+  //   category: "results",
+  // },
   //   "Impact Pathways": {
   //     query: `
   //       MATCH path = (e1:Entity)-[r:RELATION*1..3]->(e2:Entity)
@@ -75,6 +86,16 @@ export const PRESET_QUERIES = {
       RETURN p, r1, study, r2, comp LIMIT 5000
     `,
     description: "Full study designs with all components",
+    category: "study",
+  },
+
+  "Papers and Results": {
+    query: `
+    MATCH (p:Paper)-[r:REPORTS]->(e:Entity)
+    WHERE e.type = "Result"
+    RETURN p, r, e LIMIT 2000
+    `,
+    description: "Papers and their reported Results",
     category: "study",
   },
 
@@ -129,15 +150,42 @@ export const PRESET_QUERIES = {
   // Network Analysis
   "Highly Connected Entities": {
     query: `
-      MATCH (e:Entity)-[r:RELATION]-(other:Entity)
-      WITH e, COUNT(DISTINCT r) AS connections
-      ORDER BY connections DESC LIMIT 5
-      MATCH (e)-[r2:RELATION]-(connected:Entity)
-      RETURN e, r2, connected LIMIT 5000
-    `,
-    description: "Most influential entities in the network",
+    // Step 1: Find top 500 most connected entities
+    MATCH (e:Entity)-[r:RELATION]-(other:Entity)
+    WITH e, COUNT(DISTINCT r) AS connections
+    ORDER BY connections DESC
+    LIMIT 500
+
+    // Step 2: Get all connections of these top entities
+    MATCH (e)-[r2:RELATION]-(connected:Entity)
+    RETURN e, r2, connected
+    ORDER BY e.id, connections DESC
+  `,
+    description:
+      "Top 500 most connected entities and their direct relationships",
     category: "network",
   },
+  // Result
+  Results: {
+    query: `
+    // Start from Entity nodes
+    MATCH (e:Entity)-[r:RELATION]-(related:Entity)
+    WHERE e.type = "Result" OR related.type = "Result"
+    RETURN e, r, related LIMIT 2000
+    `,
+    description: "Entities connected to Results",
+    category: "network",
+  },
+  //Relations
+  Relations: {
+    query: `
+    MATCH (e1:Entity)-[r:RELATION]-(e2:Entity)
+    RETURN e1, r, e2 LIMIT 2000
+    `,
+    description: "All RELATION relationships between entities",
+    category: "network",
+  },
+
   //   "Entity Clusters": {
   //     query: `
   //       MATCH (e1:Entity)-[r:RELATION]-(e2:Entity)

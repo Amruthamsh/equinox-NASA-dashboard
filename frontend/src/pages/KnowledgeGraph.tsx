@@ -63,6 +63,8 @@ const ENTITY_TYPES = [
   "Drug",
   "Vaccine",
   "Tissue",
+  "AnimalModel",
+  "Biomarker",
 ];
 
 export default function KnowledgeGraphDashboard() {
@@ -354,9 +356,6 @@ export default function KnowledgeGraphDashboard() {
               ))}
             </SelectContent>
           </Select>
-          <p className="text-xs text-gray-400 mt-1">
-            {PRESET_QUERIES[selectedQuery]?.description}
-          </p>
         </div>
 
         {/* Stats */}
