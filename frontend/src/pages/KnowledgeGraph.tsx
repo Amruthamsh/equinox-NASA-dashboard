@@ -36,16 +36,17 @@ const PRESET_QUERIES = {
   "Topics Graph": {
     query: `
       MATCH (c:Cluster)-[r1:HAS_TOPIC]->(t:Topic)<-[r2:MENTIONS]-(p:Paper)
-      RETURN c, r1, t, r2, p LIMIT 1000
+      RETURN c, r1, t, r2, p LIMIT 200
     `,
     description: "Overview of research clusters, topics, and papers",
     category: "overview",
   },
   "Research Landscape": {
     query: `
-      MATCH (n:Topic) RETURN n LIMIT 100;
+      MATCH (c:Cluster)-[r1:CONTAINS]->(p:Paper)-[r2:MENTIONS]->(t:Topic)
+      RETURN c, r1, p, r2, t LIMIT 150
     `,
-    description: "All the topics covered by NASA research papers",
+    description: "Clusters containing papers and their topics",
     category: "overview",
   },
 
@@ -202,6 +203,8 @@ export default function KnowledgeGraphDashboard() {
   const [selectedNode, setSelectedNode] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [stats, setStats] = useState({ nodes: 0, links: 0, types: {} });
+  const [focusedNode, setFocusedNode] = useState<any>(null);
+  const [connectedNodes, setConnectedNodes] = useState<Set<string>>(new Set());
 
   // Filters
   const [highlightedTypes, setHighlightedTypes] = useState<string[]>([
@@ -346,6 +349,55 @@ export default function KnowledgeGraphDashboard() {
       return highlightedEntityTypes.includes(node.entityType);
     }
     return true;
+  };
+
+  // Handle node click for focus mode
+  const handleNodeClick = (node: any) => {
+    setSelectedNode(node);
+
+    if (focusedNode && focusedNode.id === node.id) {
+      // If clicking the same node, unfocus
+      setFocusedNode(null);
+      setConnectedNodes(new Set());
+    } else {
+      // Focus on this node and its connections
+      setFocusedNode(node);
+      const connected = new Set<string>();
+      connected.add(node.id);
+
+      // Find all directly connected nodes
+      graphData.links.forEach((link: any) => {
+        const sourceId =
+          typeof link.source === "object" ? link.source.id : link.source;
+        const targetId =
+          typeof link.target === "object" ? link.target.id : link.target;
+
+        if (sourceId === node.id) {
+          connected.add(targetId);
+        }
+        if (targetId === node.id) {
+          connected.add(sourceId);
+        }
+      });
+
+      setConnectedNodes(connected);
+    }
+  };
+
+  // Check if node should be visible (bright) in focus mode
+  const isNodeInFocus = (node: any) => {
+    if (!focusedNode) return true;
+    return connectedNodes.has(node.id);
+  };
+
+  // Check if link should be visible (bright) in focus mode
+  const isLinkInFocus = (link: any) => {
+    if (!focusedNode) return true;
+    const sourceId =
+      typeof link.source === "object" ? link.source.id : link.source;
+    const targetId =
+      typeof link.target === "object" ? link.target.id : link.target;
+    return connectedNodes.has(sourceId) && connectedNodes.has(targetId);
   };
 
   const filteredNodes = graphData.nodes.filter((node: any) => {
@@ -535,34 +587,65 @@ export default function KnowledgeGraphDashboard() {
               node.entityType ? `\nEntity: ${node.entityType}` : ""
             }`
           }
-          onNodeClick={(node) => setSelectedNode(node)}
+          onNodeClick={handleNodeClick}
           nodeCanvasObject={(node, ctx, globalScale) => {
             const fontSize = 12 / globalScale;
             const nodeSize = node.type === "Paper" ? 8 : 6;
             ctx.font = `${fontSize}px Sans-Serif`;
 
             const highlighted = isNodeHighlighted(node);
-            ctx.shadowBlur = highlighted ? 15 : 5;
+            const inFocus = isNodeInFocus(node);
+            const isFocused = focusedNode && focusedNode.id === node.id;
+
+            // Adjust opacity and glow based on focus mode
+            const opacity = inFocus ? 1 : 0.15;
+            const glowIntensity = isFocused ? 20 : inFocus ? 15 : 5;
+
+            ctx.shadowBlur = highlighted ? glowIntensity : 5;
             ctx.shadowColor = highlighted ? getNodeColor(node) : "#333";
 
-            ctx.fillStyle = highlighted ? getNodeColor(node) : "#222";
+            // Apply opacity to node color
+            let nodeColor = highlighted ? getNodeColor(node) : "#222";
+            if (!inFocus) {
+              nodeColor = "#333";
+            }
+
+            ctx.globalAlpha = opacity;
+            ctx.fillStyle = nodeColor;
             ctx.beginPath();
-            ctx.arc(node.x, node.y, nodeSize, 0, 2 * Math.PI, false);
+            ctx.arc(
+              node.x,
+              node.y,
+              isFocused ? nodeSize * 1.3 : nodeSize,
+              0,
+              2 * Math.PI,
+              false
+            );
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            if (highlighted) {
+            // Draw label only for focused node, connected nodes in focus mode, or all in normal mode
+            if ((highlighted && inFocus) || isFocused) {
               let label =
                 node.label.length > 25
                   ? node.label.slice(0, 22) + "..."
                   : node.label;
-              ctx.fillStyle = "#fff";
+              ctx.globalAlpha = inFocus ? 1 : 0.3;
+              ctx.fillStyle = inFocus ? "#fff" : "#666";
               ctx.fillText(label, node.x + nodeSize + 2, node.y + 4);
             }
+
+            ctx.globalAlpha = 1;
           }}
           linkColor={(link) => {
             const sourceHighlight = isNodeHighlighted(link.source);
             const targetHighlight = isNodeHighlighted(link.target);
+            const inFocus = isLinkInFocus(link);
+
+            if (!inFocus) {
+              return "rgba(100,100,100,0.05)";
+            }
+
             if (sourceHighlight && targetHighlight) {
               const linkColors = {
                 REPORTS: "#00FF88",
@@ -576,11 +659,14 @@ export default function KnowledgeGraphDashboard() {
             }
             return "rgba(255,255,255,0.05)";
           }}
-          linkWidth={(link) =>
-            isNodeHighlighted(link.source) && isNodeHighlighted(link.target)
-              ? 1.5
-              : 0.5
-          }
+          linkWidth={(link) => {
+            const inFocus = isLinkInFocus(link);
+            const baseWidth =
+              isNodeHighlighted(link.source) && isNodeHighlighted(link.target)
+                ? 1.5
+                : 0.5;
+            return inFocus ? baseWidth : 0.3;
+          }}
           linkDirectionalArrowLength={5}
           linkDirectionalArrowRelPos={1}
           linkLabel={(link) => link.type}
@@ -594,7 +680,11 @@ export default function KnowledgeGraphDashboard() {
           <div className="absolute right-0 top-0 w-96 h-full bg-gray-900/95 backdrop-blur-md border-l border-gray-700 shadow-2xl p-6 overflow-auto z-50">
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
-              onClick={() => setSelectedNode(null)}
+              onClick={() => {
+                setSelectedNode(null);
+                setFocusedNode(null);
+                setConnectedNodes(new Set());
+              }}
             >
               ✕
             </button>
@@ -618,6 +708,14 @@ export default function KnowledgeGraphDashboard() {
                 )}
               </div>
             </div>
+
+            {focusedNode && focusedNode.id === selectedNode.id && (
+              <div className="mb-4 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                <p className="text-sm text-purple-300">
+                  🎯 Focus mode active - click node again to unfocus
+                </p>
+              </div>
+            )}
 
             <div className="space-y-4">
               <div>
@@ -659,7 +757,7 @@ export default function KnowledgeGraphDashboard() {
         {/* Legend */}
         <div className="absolute bottom-4 left-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-4 border border-gray-700 max-w-xs">
           <h4 className="text-sm font-semibold mb-2">Relationship Types</h4>
-          <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="grid grid-cols-2 gap-2 text-xs mb-3">
             {[
               "REPORTS",
               "MENTIONS",
@@ -686,6 +784,18 @@ export default function KnowledgeGraphDashboard() {
               </div>
             ))}
           </div>
+          {focusedNode && (
+            <div className="pt-3 border-t border-gray-700">
+              <p className="text-xs text-purple-300">
+                🎯 Focus mode: Showing{" "}
+                <span className="font-bold">{connectedNodes.size}</span>{" "}
+                connected nodes
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Click focused node again to exit
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
