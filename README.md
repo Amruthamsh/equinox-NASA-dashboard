@@ -54,8 +54,6 @@ ChatGPT (Free), GitHub Copilot, and Claude (Free) were used to assist with codin
 
 ## Space Agency Data
 
-## Space Agency Data
-
 We used this [resource](https://github.com/jgalazka/SB_publications/tree/main) to get links to open access, full text copies of 608 Space Biology publications published since 2010.
 
 For this project, we also leveraged NASA publication data from the PubMed Central (PMC) repository, focusing on research papers related to space science, biology, and mission-critical technologies. The dataset included paper titles, PMC links, abstracts, conclusions, other sections and metadata such as publication and acceptance dates.
