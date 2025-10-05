@@ -4,7 +4,7 @@
 
 ### Backend
 
-.env file
+create an .env file
 
 ```
 GROQ_API_KEY=
@@ -27,7 +27,7 @@ uvicorn main:app --reload
 
 ### Frontend
 
-.env file
+create an .env file
 
 ```
 NEO4J_URI=
