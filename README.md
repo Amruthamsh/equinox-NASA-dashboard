@@ -1,5 +1,18 @@
 # Equinox — From Space Research to Mission Readiness
 
+## Project Summary
+
+**High-Level Summary**
+
+**Equinox** is an **AI-driven research exploration and mission planning platform** designed to help citizens, scientists, policymakers, and mission planners make sense of NASA’s vast research ecosystem. It connects research publications, funding data, and mission goals into a single interactive environment — enabling **data-driven insights, discovery, and strategic decision-making**.
+
+The system “solves” the challenge of **navigating and interpreting NASA’s complex research landscape** by making it **interactive, explainable, and actionable**. It empowers users to learn and explore NASA's vast data, uncover hidden connections, identify funding gaps, and make informed strategic decisions — ultimately accelerating curiosity, innovation and improving mission planning. 
+
+The ultimate aim is to accelerate discovery and mission readiness by turning NASA’s fragmented research data into a living knowledge system.
+We hope Equinox inspires users to ask new questions, uncover overlooked opportunities, and shape the future of space exploration through informed insights.
+
+<img width="3024" height="1806" alt="image" src="https://github.com/user-attachments/assets/8678c40a-0886-4df8-9878-732f058ed12b" />
+
 ## Running the project
 
 ### Backend
@@ -45,19 +58,6 @@ npm i
 ```
 npm run dev
 ```
-
-## Project Summary
-
-**High-Level Summary**
-
-**Equinox** is an **AI-driven research exploration and mission planning platform** designed to help citizens, scientists, policymakers, and mission planners make sense of NASA’s vast research ecosystem. It connects research publications, funding data, and mission goals into a single interactive environment — enabling **data-driven insights, discovery, and strategic decision-making**.
-
-The system “solves” the challenge of **navigating and interpreting NASA’s complex research landscape** by making it **interactive, explainable, and actionable**. It empowers users to learn and explore NASA's vast data, uncover hidden connections, identify funding gaps, and make informed strategic decisions — ultimately accelerating curiosity, innovation and improving mission planning. 
-
-The ultimate aim is to accelerate discovery and mission readiness by turning NASA’s fragmented research data into a living knowledge system.
-We hope Equinox inspires users to ask new questions, uncover overlooked opportunities, and shape the future of space exploration through informed insights.
-
-<img width="3024" height="1806" alt="image" src="https://github.com/user-attachments/assets/8678c40a-0886-4df8-9878-732f058ed12b" />
 
 ## Project Details
 
@@ -112,29 +112,6 @@ Linked studies to funding and mission relevance, enabling identification of rese
 Created interactive knowledge property graphs for exploring relationships between studies, experiments, and mission objectives.
 
 This open NASA dataset inspired the project by providing reliable, mission-relevant research content, which served as the foundation for AI-driven exploration, visualization, and mission planning insights.
-
-## Sources for budget analysis
-
-1. https://en.wikipedia.org/wiki/Budget_of_NASA
-2. https://www.planetary.org/space-policy/every-nasa-budget-request
-3. https://www.nasa.gov/budgets-plans-and-reports/
-4. https://www.universetoday.com/articles/nasas-fy-2026-budget-request-has-been-released
-5. https://www.nasa.gov/wp-content/uploads/2025/05/fy-2026-budget-technical-supplement-002.pdf
-6. https://www.planetary.org/articles/nasa-2026-budget-proposal-in-charts
-7. https://aas.org/posts/news/2025/06/fy26-presidents-budget-request
-8. https://www.planetary.org/space-policy/nasa-budget
-9. https://www.nasa.gov/fy-2026-budget-request/
-10. https://www.nasa.gov/wp-content/uploads/2023/12/o45128943-1983-1.pdf
-11. https://ourworldindata.org/grapher/nasa-annual-budget
-12. https://www.planetary.org/charts/nasa-budget-plot
-13. https://www.nasa.gov/value-of-nasa/
-14. https://www.nasa.gov/news-release/nasa-report-details-how-agency-significantly-benefits-us-economy/
-15. https://www.nasa.gov/wp-content/uploads/2025/05/fy2026-budget-request-summary-briefing-finalv2-05292025-430pm.pdf
-16. https://docs.google.com/spreadsheets/d/1NMRYCCRWXwpn3pZU57-Bb0P1Zp3yg2lTTVUzvc5GkIs/edit
-17. https://www.reddit.com/r/space/comments/a5k7a0/the_nasa_budget_peaked_at_441_of_the_us_federal/
-18. https://aas.org/posts/news/2025/07/house-fy2026-appropriations-report-nasa-nsf-and-doe-details
-19. https://www.lpi.usra.edu/exploration/multimedia/NASABudgetHistory.pdf
-20. https://www.congress.gov/crs-product/R43419
 
 ## References
 
