@@ -1,5 +1,51 @@
 # Equinox — From Space Research to Mission Readiness
 
+## Running the project
+
+### Backend
+
+.env file
+
+```
+GROQ_API_KEY=
+
+NEO4J_URI=
+NEO4J_USERNAME=
+NEO4J_PASSWORD=
+NEO4J_DATABASE=
+AURA_INSTANCEID=
+AURA_INSTANCENAME=
+```
+
+```
+python install -r requirements.txt 
+```
+
+```
+uvicorn main:app --reload
+```
+
+### Frontend
+
+.env file
+
+```
+NEO4J_URI=
+NEO4J_USERNAME=
+NEO4J_PASSWORD=
+NEO4J_DATABASE=
+AURA_INSTANCEID=
+AURA_INSTANCENAME=
+```
+
+```
+npm i
+```
+
+```
+npm run dev
+```
+
 ## Project Summary
 
 **High-Level Summary**
