@@ -6,11 +6,6 @@
 
 **Equinox** is an **AI-driven research exploration and mission planning platform** designed to help citizens, scientists, policymakers, and mission planners make sense of NASA’s vast research ecosystem. It connects research publications, funding data, and mission goals into a single interactive environment — enabling **data-driven insights, discovery, and strategic decision-making**.
 
-The system “solves” the challenge of **navigating and interpreting NASA’s complex research landscape** by making it **interactive, explainable, and actionable**. It empowers users to learn and explore NASA's vast data, uncover hidden connections, identify funding gaps, and make informed strategic decisions — ultimately accelerating curiosity, innovation and improving mission planning. 
-
-The ultimate aim is to accelerate discovery and mission readiness by turning NASA’s fragmented research data into a living knowledge system.
-We hope Equinox inspires users to ask new questions, uncover overlooked opportunities, and shape the future of space exploration through informed insights.
-
 <img width="3024" height="1806" alt="image" src="https://github.com/user-attachments/assets/8678c40a-0886-4df8-9878-732f058ed12b" />
 
 ## Running the project
